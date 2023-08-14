@@ -100,16 +100,22 @@ int main()
             std::vector<std::string> logLines;
             std::string line;
             bool foundVersionLine = false;
+            bool addPrevToNextLine = false;
             while (std::getline(logFile, line))
             {
-                if (foundVersionLine)
+                if (foundVersionLine && addPrevToNextLine)
                 {
-                    line = "// " + line + " _Prev"; // Comment out the previous version line and add "_Prev"
+                    line += " _Prev"; // Add "_Prev" to the previous version line
                     foundVersionLine = false;
+                    addPrevToNextLine = false;
                 }
                 if (line.find("Version: " + version) != std::string::npos)
                 {
                     foundVersionLine = true;
+                }
+                if (line.find("Date: ") == 0 && line.find("// ") == 0)
+                {
+                    addPrevToNextLine = true; // Add "_Prev" to the next line that starts with "//"
                 }
                 logLines.push_back(line);
             }
@@ -211,9 +217,10 @@ int main()
 
     // Rewrite the log file with updated lines
     std::ofstream logFileOut("version_change_log.txt");
-    for (const std::string &logLine : logLines)
+    for (size_t i = 0; i < logLines.size(); ++i)
     {
-        logFileOut << logLine << '\n';
+
+        logFileOut << logLines[i] << '\n';
     }
     logFileOut.close();
 
