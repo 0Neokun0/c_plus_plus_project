@@ -65,6 +65,21 @@ bool isFirstRun()
 
 int main()
 {
+    if (isFirstRun())
+    {
+        std::ofstream logFile("version_change_log.txt");
+        if (logFile.is_open())
+        {
+            logFile << "This is the log system for version change and revision change.\n\n";
+            logFile.close();
+        }
+        else
+        {
+            std::cerr << "Error creating log file." << std::endl;
+            return 1;
+        }
+    }
+
     std::string version, revision;
 
     int option;

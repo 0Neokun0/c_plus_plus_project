@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <cctype> // For isdigit function
+#include <iomanip> // For formatting numbers
 
 // Function to generate current date and time
 std::string getCurrentDateTime()
@@ -65,6 +66,21 @@ bool isFirstRun()
 
 int main()
 {
+    if (isFirstRun())
+    {
+        std::ofstream logFile("version_change_log.txt");
+        if (logFile.is_open())
+        {
+            logFile << "This is the log system for version change and revision change.\n\n";
+            logFile.close();
+        }
+        else
+        {
+            std::cerr << "Error creating log file." << std::endl;
+            return 1;
+        }
+    }
+
     std::string version, revision;
 
     int option;
@@ -268,7 +284,8 @@ int main()
     logFileOut.close();
 
     // Prepare the log entry for version or revision changes
-    std::string logEntry = "Date: " + getCurrentDateTime() + " - Version: " + version + " - Revision: " + revision;
+    std::string formattedVersion = std::string(3 - version.length(), '0') + version;
+    std::string logEntry = "Date: " + getCurrentDateTime() + " - Version: " + formattedVersion + " - Revision: " + revision;
 
     // Assume you have header file names in a vector
     std::vector<std::string> headerFiles = {"header_1.h", "header_2.h"};
@@ -277,11 +294,11 @@ int main()
         // Add the updated file information to the log entry
         if (versionChanged)
         {
-            logEntry += " - Updated file: " + header + " " + version + "-" + revision;
+            logEntry += " - Updated file: " + header + " " + formattedVersion + "-" + revision;
         }
         else if (revisionChanged)
         {
-            logEntry += " - Updated file: " + header + " " + version + "-" + revision;
+            logEntry += " - Updated file: " + header + " " + formattedVersion + "-" + revision;
         }
     }
 
