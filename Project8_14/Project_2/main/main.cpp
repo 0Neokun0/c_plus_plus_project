@@ -90,62 +90,106 @@ int main()
                 continue;
             }
 
-            revision = "01";             // Reset revision to "01" when version is updated
-            versionChanged = true;       // Set the versionChanged flag
-            addCommentToPrevDate = true; // Set to add "// " to previous Date
-            addPrevToFileNames = true;   // Set to add "_Prev" to previous file names
-            std::cout << "Changing version number to " << version << ".\n";
-            // Mark previous version log line with "// " and "_Prev"
+            // Check if the version has been incremented
             std::ifstream logFile("version_change_log.txt");
-            std::vector<std::string> logLines;
             std::string line;
-            bool foundVersionLine = false;
-            bool addPrevToNextLine = false;
+            bool versionIncremented = false;
+            bool sameVersionUploaded = false; // Track if the same version has been uploaded
             while (std::getline(logFile, line))
             {
-                if (foundVersionLine && addPrevToNextLine)
-                {
-                    line += " _Prev"; // Add "_Prev" to the previous version line
-                    foundVersionLine = false;
-                    addPrevToNextLine = false;
-                }
                 if (line.find("Version: " + version) != std::string::npos)
                 {
-                    foundVersionLine = true;
+                    versionIncremented = true;
+                    break;
                 }
-                if (line.find("Date: ") == 0 && line.find("// ") == 0)
-                {
-                    addPrevToNextLine = true; // Add "_Prev" to the next line that starts with "//"
-                }
-                logLines.push_back(line);
             }
             logFile.close();
 
-            // Rewrite the log file with updated lines
-            std::ofstream outFile("version_change_log.txt");
-            for (size_t i = 0; i < logLines.size(); ++i)
+            if (!versionIncremented)
             {
-                if (i > 0 && logLines[i].find("Date: ") != std::string::npos)
+                // Check if the version is the same as the previous log line
+                logFile.open("version_change_log.txt");
+                while (std::getline(logFile, line))
                 {
-                    if (i == logLines.size() - 1)
+                    if (line.find("Version: ") != std::string::npos)
                     {
-                        outFile << "// " << logLines[i] << '\n'; // Comment out 'Date' for the latest log line
-                    }
-                    else
-                    {
-                        outFile << logLines[i] << '\n'; // Keep 'Date' as is for older log lines
+                        std::string prevVersion = line.substr(9, 3);
+                        if (prevVersion == version)
+                        {
+                            sameVersionUploaded = true;
+                            break;
+                        }
                     }
                 }
-                else if (versionChanged && addPrevToFileNames && logLines[i].find("Updated file: ") != std::string::npos)
+                logFile.close();
+
+                if (!sameVersionUploaded)
                 {
-                    outFile << logLines[i] << "_Prev" << '\n'; // Add "_Prev" to previous file names
+                    revision = "01";             // Reset revision to "01" when version is updated
+                    versionChanged = true;       // Set the versionChanged flag
+                    addCommentToPrevDate = true; // Set to add "// " to previous Date
+                    addPrevToFileNames = true;   // Set to add "_Prev" to previous file names
+                    std::cout << "Changing version number to " << version << ".\n";
+
+                    // Read and update previous log lines
+                    logFile.open("version_change_log.txt");
+                    std::vector<std::string> logLines;
+                    std::string prevVersion;
+                    bool prevVersionChanged = false;
+                    while (std::getline(logFile, line))
+                    {
+                        if (line.find("Version: ") != std::string::npos)
+                        {
+                            prevVersion = line.substr(9, 3);
+                            prevVersionChanged = (prevVersion != version);
+                        }
+                        if (prevVersionChanged && line.find("Updated file: ") != std::string::npos)
+                        {
+                            if (line.find("_Prev") == std::string::npos) // Check if '_Prev' is not already present
+                            {
+                                line = "// " + line + " _Prev"; // Add "// " and "_Prev" to the previous line's updated file names
+                            }
+                            prevVersionChanged = false;
+                        }
+                        logLines.push_back(line);
+                    }
+                    logFile.close();
+
+                    // Rewrite the log file with updated lines
+                    std::ofstream outFile("version_change_log.txt");
+                    for (size_t i = 0; i < logLines.size(); ++i)
+                    {
+                        if (i > 0 && logLines[i].find("Date: ") != std::string::npos)
+                        {
+                            if (i == logLines.size() - 1)
+                            {
+                                outFile << "// " << logLines[i] << '\n'; // Comment out 'Date' for the latest log line
+                            }
+                            else
+                            {
+                                outFile << logLines[i] << '\n'; // Keep 'Date' as is for older log lines
+                            }
+                        }
+                        else if (versionChanged && addPrevToFileNames && logLines[i].find("Updated file: ") != std::string::npos)
+                        {
+                            outFile << logLines[i] << "_Prev" << '\n'; // Add "_Prev" to previous file names
+                        }
+                        else
+                        {
+                            outFile << logLines[i] << '\n';
+                        }
+                    }
+                    outFile.close();
                 }
                 else
                 {
-                    outFile << logLines[i] << '\n';
+                    std::cout << "Same version number " << version << " has already been uploaded. Please enter a different version number.\n";
                 }
             }
-            outFile.close();
+            else
+            {
+                std::cout << "Version " << version << " already exists. Increment the version number.\n";
+            }
 
             break;
         }
@@ -217,10 +261,9 @@ int main()
 
     // Rewrite the log file with updated lines
     std::ofstream logFileOut("version_change_log.txt");
-    for (size_t i = 0; i < logLines.size(); ++i)
+    for (const std::string &logLine : logLines)
     {
-
-        logFileOut << logLines[i] << '\n';
+        logFileOut << logLine << '\n';
     }
     logFileOut.close();
 
@@ -234,11 +277,11 @@ int main()
         // Add the updated file information to the log entry
         if (versionChanged)
         {
-            logEntry += " - Updated file: " + header + " " + version + "-" + revision + "_Prev"; // Add "_Prev" to older versions
+            logEntry += " - Updated file: " + header + " " + version + "-" + revision;
         }
         else if (revisionChanged)
         {
-            logEntry += " - Updated file: " + header + " " + version + "-" + revision; // No "_Prev" for revision change log line
+            logEntry += " - Updated file: " + header + " " + version + "-" + revision;
         }
     }
 
