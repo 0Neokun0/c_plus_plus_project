@@ -4,7 +4,8 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
-#include <cctype> // For isdigit function
+#include <cctype>
+#include <iomanip>
 
 // Function to generate current date and time
 std::string getCurrentDateTime()
@@ -63,6 +64,17 @@ bool isFirstRun()
     return !logFile.good();
 }
 
+// Function to update the log file with formatted lines
+void updateLogFile(const std::vector<std::string> &logLines)
+{
+    std::ofstream outFile("version_change_log.txt");
+    for (const std::string &logLine : logLines)
+    {
+        outFile << logLine << '\n';
+    }
+    outFile.close();
+}
+
 int main()
 {
     if (isFirstRun())
@@ -80,236 +92,230 @@ int main()
         }
     }
 
-    std::string version, revision;
-
-    int option;
-    bool versionChanged = false;       // Track if version number is changed
-    bool revisionChanged = false;      // Track if revision number is changed
-    bool addCommentToPrevDate = false; // Track if "// " should be added to previous Date
-    bool addPrevToFileNames = false;   // Track if "_Prev" should be added to previous file names
-
     while (true)
     {
         std::cout << "Choose an option:\n";
         std::cout << "1. Update version\n";
         std::cout << "2. Update revision\n";
         std::cout << "0. Quit\n";
+
+        int option;
         std::cin >> option;
 
-        if (option == 1)
+        if (option == 0)
         {
-            version = getValidVersionNumber();
-            if (version.length() != 3)
-            {
-                std::cout << "Version number must be exactly 3 digits.\n";
-                continue;
-            }
+            std::cout << "Exiting...\n";
+            break;
+        }
+        else if (option == 1 || option == 2)
+        {
+            std::string version, revision;
+            bool versionChanged = false;
+            bool revisionChanged = false;
+            bool addCommentToPrevDate = false;
+            bool addPrevToFileNames = false;
 
-            // Check if the version has been incremented
-            std::ifstream logFile("version_change_log.txt");
-            std::string line;
-            bool versionIncremented = false;
-            bool sameVersionUploaded = false; // Track if the same version has been uploaded
-            while (std::getline(logFile, line))
+            if (option == 1)
             {
-                if (line.find("Version: " + version) != std::string::npos)
+                version = getValidVersionNumber();
+                if (version.length() != 3)
                 {
-                    versionIncremented = true;
-                    break;
+                    std::cout << "Version number must be exactly 3 digits.\n";
+                    continue;
                 }
-            }
-            logFile.close();
 
-            if (!versionIncremented)
-            {
-                // Check if the version is the same as the previous log line
-                logFile.open("version_change_log.txt");
+                std::ifstream logFile("version_change_log.txt");
+                std::string line;
+                bool versionIncremented = false;
+                bool sameVersionUploaded = false;
                 while (std::getline(logFile, line))
                 {
+                    if (line.find("Version: " + version) != std::string::npos)
+                    {
+                        versionIncremented = true;
+                        break;
+                    }
+                }
+                logFile.close();
+
+                if (!versionIncremented)
+                {
+                    logFile.open("version_change_log.txt");
+                    while (std::getline(logFile, line))
+                    {
+                        if (line.find("Version: ") != std::string::npos)
+                        {
+                            std::string prevVersion = line.substr(9, 3);
+                            if (prevVersion == version)
+                            {
+                                sameVersionUploaded = true;
+                                break;
+                            }
+                        }
+                    }
+                    logFile.close();
+
+                    if (!sameVersionUploaded)
+                    {
+                        revision = "01";
+                        versionChanged = true;
+                        addCommentToPrevDate = true;
+                        addPrevToFileNames = true;
+                        std::cout << "Changing version number to " << version << ".\n";
+
+                        logFile.open("version_change_log.txt");
+                        std::vector<std::string> logLines;
+                        std::string prevVersion;
+                        bool prevVersionChanged = false;
+                        while (std::getline(logFile, line))
+                        {
+                            if (line.find("Version: ") != std::string::npos)
+                            {
+                                prevVersion = line.substr(9, 3);
+                                prevVersionChanged = (prevVersion != version);
+                            }
+                            if (prevVersionChanged && line.find("Updated file: ") != std::string::npos)
+                            {
+                                if (line.find("_Prev") == std::string::npos)
+                                {
+                                    if (!line.empty() && line.substr(0, 3) != "// ")
+                                    {
+                                        line = "// " + line;
+                                    }
+                                    line += " _Prev";
+                                }
+                                prevVersionChanged = false;
+                            }
+                            logLines.push_back(line);
+                        }
+                        logFile.close();
+
+                        updateLogFile(logLines);
+
+                        std::ofstream outFile("version_change_log.txt", std::ios_base::app);
+                        if (!outFile.is_open())
+                        {
+                            std::cerr << "Error opening log file." << std::endl;
+                            return 1;
+                        }
+
+                        std::string formattedVersion = std::string(3 - version.length(), '0') + version;
+                        std::string logEntry = "Date: " + getCurrentDateTime() + " - Version: " + formattedVersion + " - Revision: " + revision;
+
+                        std::vector<std::string> headerFiles = {"header_1.h", "header_2.h"};
+                        for (const std::string &header : headerFiles)
+                        {
+                            if (versionChanged)
+                            {
+                                logEntry += " - Updated file: " + header + " " + formattedVersion + "-" + revision;
+                            }
+                            else if (revisionChanged)
+                            {
+                                logEntry += " - Updated file: " + header + " " + formattedVersion + "-" + revision;
+                            }
+                        }
+
+                        outFile << logEntry << "\n\n";
+                        outFile.close();
+                    }
+                    else
+                    {
+                        std::cout << "Same version number " << version << " has already been uploaded. Please enter a different version number.\n";
+                    }
+                }
+                else
+                {
+                    std::cout << "Version " << version << " already exists. Increment the version number.\n";
+                }
+            }
+            else if (option == 2)
+            {
+                std::ifstream logFile("version_change_log.txt");
+                int lastRevision = 0;
+                int latestVersion = 0;
+                std::string line;
+                while (std::getline(logFile, line))
+                {
+                    if (line.find("Revision: ") != std::string::npos)
+                    {
+                        std::size_t foundPos = line.find("Revision: ");
+                        std::string revisionStr = line.substr(foundPos + 10, 2);
+                        if (!revisionStr.empty() && std::isdigit(revisionStr[0]) && std::isdigit(revisionStr[1]))
+                        {
+                            lastRevision = std::stoi(revisionStr);
+                        }
+                    }
                     if (line.find("Version: ") != std::string::npos)
                     {
-                        std::string prevVersion = line.substr(9, 3);
-                        if (prevVersion == version)
+                        std::size_t foundPos = line.find("Version: ");
+                        std::string versionStr = line.substr(foundPos + 9, 3);
+                        if (!versionStr.empty() && std::isdigit(versionStr[0]) && std::isdigit(versionStr[1]) && std::isdigit(versionStr[2]))
                         {
-                            sameVersionUploaded = true;
-                            break;
+                            latestVersion = std::stoi(versionStr);
                         }
                     }
                 }
                 logFile.close();
 
-                if (!sameVersionUploaded)
+                lastRevision = (lastRevision + 1) % 100;
+                revision = (lastRevision < 10) ? ("0" + std::to_string(lastRevision)) : std::to_string(lastRevision);
+                version = (latestVersion > 0) ? std::to_string(latestVersion) : "000";
+
+                revisionChanged = true;
+                addCommentToPrevDate = true;
+                addPrevToFileNames = false;
+                std::cout << "Changing revision number to " << revision << ".\n";
+
+                logFile.open("version_change_log.txt");
+                std::vector<std::string> logLines;
+                while (std::getline(logFile, line))
                 {
-                    revision = "01";             // Reset revision to "01" when version is updated
-                    versionChanged = true;       // Set the versionChanged flag
-                    addCommentToPrevDate = true; // Set to add "// " to previous Date
-                    addPrevToFileNames = true;   // Set to add "_Prev" to previous file names
-                    std::cout << "Changing version number to " << version << ".\n";
-
-                    // Read and update previous log lines
-                    logFile.open("version_change_log.txt");
-                    std::vector<std::string> logLines;
-                    std::string prevVersion;
-                    bool prevVersionChanged = false;
-                    while (std::getline(logFile, line))
+                    if (line.find("Revision: ") != std::string::npos)
                     {
-                        if (line.find("Version: ") != std::string::npos)
+                        if (!line.empty() && line.substr(0, 3) != "// ")
                         {
-                            prevVersion = line.substr(9, 3);
-                            prevVersionChanged = (prevVersion != version);
-                        }
-                        if (prevVersionChanged && line.find("Updated file: ") != std::string::npos)
-                        {
-                            if (line.find("_Prev") == std::string::npos) // Check if '_Prev' is not already present
-                            {
-                                line = "// " + line + " _Prev"; // Add "// " and "_Prev" to the previous line's updated file names
-                            }
-                            prevVersionChanged = false;
-                        }
-                        logLines.push_back(line);
-                    }
-                    logFile.close();
-
-                    // Rewrite the log file with updated lines
-                    std::ofstream outFile("version_change_log.txt");
-                    for (size_t i = 0; i < logLines.size(); ++i)
-                    {
-                        if (i > 0 && logLines[i].find("Date: ") != std::string::npos)
-                        {
-                            if (i == logLines.size() - 1)
-                            {
-                                outFile << "// " << logLines[i] << '\n'; // Comment out 'Date' for the latest log line
-                            }
-                            else
-                            {
-                                outFile << logLines[i] << '\n'; // Keep 'Date' as is for older log lines
-                            }
-                        }
-                        else if (versionChanged && addPrevToFileNames && logLines[i].find("Updated file: ") != std::string::npos)
-                        {
-                            outFile << logLines[i] << "_Prev" << '\n'; // Add "_Prev" to previous file names
-                        }
-                        else
-                        {
-                            outFile << logLines[i] << '\n';
+                            line = "// " + line;
                         }
                     }
-                    outFile.close();
+                    logLines.push_back(line);
                 }
-                else
+                logFile.close();
+
+                updateLogFile(logLines);
+
+                std::ofstream outFile("version_change_log.txt", std::ios_base::app);
+                if (!outFile.is_open())
                 {
-                    std::cout << "Same version number " << version << " has already been uploaded. Please enter a different version number.\n";
+                    std::cerr << "Error opening log file." << std::endl;
+                    return 1;
                 }
+
+                std::string formattedVersion = std::string(3 - version.length(), '0') + version;
+                std::string formattedRevision = (revision.length() == 1) ? ("0" + revision) : revision;
+                std::string logEntry = "Date: " + getCurrentDateTime() + " - Version: " + formattedVersion + " - Revision: " + formattedRevision;
+
+                std::vector<std::string> headerFiles = {"header_1.h", "header_2.h"};
+                for (const std::string &header : headerFiles)
+                {
+                    if (versionChanged)
+                    {
+                        logEntry += " - Updated file: " + header + " " + formattedVersion + "-" + formattedRevision;
+                    }
+                    else if (revisionChanged)
+                    {
+                        logEntry += " - Updated file: " + header + " " + formattedVersion + "-" + formattedRevision;
+                    }
+                }
+
+                outFile << logEntry << "\n\n";
+                outFile.close();
             }
-            else
-            {
-                std::cout << "Version " << version << " already exists. Increment the version number.\n";
-            }
-
-            break;
-        }
-        else if (option == 2)
-        {
-            // Increment revision number by 1 and format it to 2 digits
-            std::ifstream logFile("version_change_log.txt");
-            int lastRevision = 0;
-            int latestVersion = 0;
-            std::string line;
-            while (std::getline(logFile, line))
-            {
-                if (line.find("Revision: ") != std::string::npos)
-                {
-                    std::size_t foundPos = line.find("Revision: ");
-                    std::string revisionStr = line.substr(foundPos + 10, 2);
-                    if (!revisionStr.empty() && std::isdigit(revisionStr[0]) && std::isdigit(revisionStr[1]))
-                    {
-                        lastRevision = std::stoi(revisionStr);
-                    }
-                }
-                if (line.find("Version: ") != std::string::npos)
-                {
-                    std::size_t foundPos = line.find("Version: ");
-                    std::string versionStr = line.substr(foundPos + 9, 3);
-                    if (!versionStr.empty() && std::isdigit(versionStr[0]) && std::isdigit(versionStr[1]) && std::isdigit(versionStr[2]))
-                    {
-                        latestVersion = std::stoi(versionStr);
-                    }
-                }
-            }
-            logFile.close();
-
-            lastRevision = (lastRevision + 1) % 100;
-            revision = (lastRevision < 10) ? ("0" + std::to_string(lastRevision)) : std::to_string(lastRevision);
-            version = (latestVersion > 0) ? std::to_string(latestVersion) : "000";
-
-            revisionChanged = true;      // Set the revisionChanged flag
-            addCommentToPrevDate = true; // Set to add "// " to previous Date
-            addPrevToFileNames = false;  // Reset to not add "_Prev" to previous file names
-            std::cout << "Changing revision number to " << revision << ".\n";
-
-            break;
-        }
-        else if (option == 0)
-        {
-            std::cout << "Exiting...\n";
-            return 0;
         }
         else
         {
             std::cout << "Invalid option selected. Please try again.\n";
         }
     }
-    // Read existing log lines and prepare updated log entry
-    std::ifstream logFileIn("version_change_log.txt");
-    std::vector<std::string> logLines;
-    std::string line;
-    while (std::getline(logFileIn, line))
-    {
-        if (addCommentToPrevDate && line.find("Date: ") == 0)
-        {
-            line = "// " + line; // Comment out the Date line
-            addCommentToPrevDate = false;
-        }
-        logLines.push_back(line);
-    }
-    logFileIn.close();
-
-    // Rewrite the log file with updated lines
-    std::ofstream logFileOut("version_change_log.txt");
-    for (const std::string &logLine : logLines)
-    {
-        logFileOut << logLine << '\n';
-    }
-    logFileOut.close();
-
-    // Prepare the log entry for version or revision changes
-    std::string logEntry = "Date: " + getCurrentDateTime() + " - Version: " + version + " - Revision: " + revision;
-
-    // Assume you have header file names in a vector
-    std::vector<std::string> headerFiles = {"header_1.h", "header_2.h"};
-    for (const std::string &header : headerFiles)
-    {
-        // Add the updated file information to the log entry
-        if (versionChanged)
-        {
-            logEntry += " - Updated file: " + header + " " + version + "-" + revision;
-        }
-        else if (revisionChanged)
-        {
-            logEntry += " - Updated file: " + header + " " + version + "-" + revision;
-        }
-    }
-
-    // Update version_change_log.txt
-    std::ofstream logFile("version_change_log.txt", std::ios_base::app);
-    if (!logFile.is_open())
-    {
-        std::cerr << "Error opening log file." << std::endl;
-        return 1;
-    }
-
-    logFile << logEntry << "\n\n"; // Write log entry to file
-    logFile.close();               // Close the log file
 
     return 0;
 }
