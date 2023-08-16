@@ -1,0 +1,32 @@
+これはバージョン変更とリビジョン変更のためのログシステムです。
+
+// Date: 2023-08-16 13:30:26 - Version: 000 - Revision: 01 - Updated file: header_1.h 000-01 - Updated file: header_2.h 000-01 _Prev
+
+// Date: 2023-08-16 13:30:38 - Version: 001 - Revision: 01 - Updated file: header_1.h 001-01 - Updated file: header_2.h 001-01 _Prev
+
+// Date: 2023-08-16 13:30:43 - Version: 002 - Revision: 01 - Updated file: header_1.h 002-01 - Updated file: header_2.h 002-01 _Prev
+
+// Date: 2023-08-16 13:30:51 - Version: 003 - Revision: 01 - Updated file: header_1.h 003-01 - Updated file: header_2.h 003-01 _Prev
+
+// Date: 2023-08-16 13:30:53 - Version: 003 - Revision: 02 - Updated file: header_1.h 003-02 - Updated file: header_2.h 003-02
+
+// Date: 2023-08-16 13:30:53 - Version: 003 - Revision: 03 - Updated file: header_1.h 003-03 - Updated file: header_2.h 003-03
+
+// Date: 2023-08-16 13:30:54 - Version: 003 - Revision: 04 - Updated file: header_1.h 003-04 - Updated file: header_2.h 003-04
+
+// Date: 2023-08-16 13:30:57 - Version: 004 - Revision: 01 - Updated file: header_1.h 004-01 - Updated file: header_2.h 004-01 _Prev
+
+// Date: 2023-08-16 13:31:02 - Version: 004 - Revision: 02 - Updated file: header_1.h 004-02 - Updated file: header_2.h 004-02
+
+// Date: 2023-08-16 13:31:03 - Version: 004 - Revision: 03 - Updated file: header_1.h 004-03 - Updated file: header_2.h 004-03
+
+// Date: 2023-08-16 13:31:06 - Version: 005 - Revision: 01 - Updated file: header_1.h 005-01 - Updated file: header_2.h 005-01 _Prev
+
+// Date: 2023-08-16 13:31:10 - Version: 006 - Revision: 01 - Updated file: header_1.h 006-01 - Updated file: header_2.h 006-01 _Prev
+
+// Date: 2023-08-16 13:31:13 - Version: 006 - Revision: 02 - Updated file: header_1.h 006-02 - Updated file: header_2.h 006-02
+
+// Date: 2023-08-16 13:31:14 - Version: 006 - Revision: 03 - Updated file: header_1.h 006-03 - Updated file: header_2.h 006-03
+
+Date: 2023-08-16 13:31:27 - Version: 007 - Revision: 01 - Updated file: header_1.h 007-01 - Updated file: header_2.h 007-01
+
