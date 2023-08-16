@@ -176,13 +176,16 @@ int main()
                             }
                             if (prevVersionChanged && line.find("Updated file: ") != std::string::npos)
                             {
-                                if (line.find("_Prev") == std::string::npos && revision == "01")
+                                if (line.find("_Prev") == std::string::npos)
                                 {
                                     if (!line.empty() && line.substr(0, 3) != "// ")
                                     {
                                         line = "// " + line;
                                     }
-                                    line += " _Prev";
+                                    if (line.find("-01") != std::string::npos)
+                                    {
+                                        line += " _Prev";
+                                    }
                                 }
                                 prevVersionChanged = false;
                             }
