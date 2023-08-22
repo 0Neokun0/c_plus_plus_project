@@ -1,4 +1,5 @@
 /*! @file DasMaskApplyVersionInfo.h
+const Vi_Version DasMaskApply_Version ("DasMaskApply", "2014/06/05", "556", "01", "RELS_DASMASKAPPLY_556-01", "015"hp");
 
  @brief ƒo[ƒWƒ‡ƒ“î•ñ
  

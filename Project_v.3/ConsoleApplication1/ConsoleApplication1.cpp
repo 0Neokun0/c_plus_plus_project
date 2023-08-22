@@ -55,51 +55,60 @@ void updateMainVersion(std::vector<std::string>& fileLines, const std::string& n
     for (size_t i = 0; i < fileLines.size(); ++i) {
         std::string& line = fileLines[i];
 
-        // Check if the line contains "const Vi_Version"
-        if (line.find("const Vi_Version") != std::string::npos) {
-            std::string prefix = "_Prev";  // Prefix for lines with "_Prev"
-            size_t prefixPos = line.find(prefix);
+        // Check if the line contains "const Vi_Version" and does not have "//" before it
+        if (line.find("const Vi_Version") != std::string::npos && line.find("//") != 0) {
+            size_t mainVersionPos = line.find_last_of('"', line.find_last_of('"') - 1) - 3;
+            if (mainVersionPos != std::string::npos && mainVersionPos < line.size()) {
+                std::string mainVersion = line.substr(mainVersionPos, 3);
 
-            // Check if the line contains the specified prefix
-            if (prefixPos != std::string::npos) {
-                // Find the positions of the main version number within the line
-                size_t startPos = line.find('"', prefixPos + prefix.length()) + 1;
-                size_t endPos = line.find('"', startPos);
-                std::string mainVersion = line.substr(startPos, endPos - startPos);
+                if (mainVersion.size() == 3 && std::all_of(mainVersion.begin(), mainVersion.end(), ::isdigit)) {
+                    std::string prefix = "_Prev";
+                    size_t prefixPos = line.find(prefix);
 
-                // Check if the new main version is already present in the line
-                if (mainVersion == newMainVersion) {
-                    // Prompt the user to enter a different main version
-                    std::cout << "Main version " << newMainVersion << " already exists. Enter a different version: ";
-                    std::string userInputVersion;
-                    std::getline(std::cin, userInputVersion);  // Get user input for a different version
+                    if (prefixPos != std::string::npos) {
+                        // Prompt the user for a new main version
+                        std::cout << "Enter the new main version (3 digits): ";
+                        std::string userInput;
+                        std::getline(std::cin, userInput);
+                        std::string newMainVersion = userInput;
 
-                    // Reset the input stream and ignore any remaining characters
-                    std::cin.clear();
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        // Reset the input stream and ignore any remaining characters
+                        std::cin.clear();
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-                    // Retry the function with the new user input
-                    updateMainVersion(fileLines, userInputVersion);
-                    return;  // Exit the function after retry
+                        if (newMainVersion.length() == 3 && std::all_of(newMainVersion.begin(), newMainVersion.end(), ::isdigit)) {
+                            // Comment out the original line and add the new main version line
+                            std::string commentedLine = "//" + line;
+                            std::string newMainVersionLine = line.substr(0, mainVersionPos) + newMainVersion + line.substr(mainVersionPos + 3);
+                            fileLines.insert(fileLines.begin() + i + 1, newMainVersionLine);  // Insert the new line
+                            fileLines[i] = commentedLine;  // Replace the original line with the commented line
+
+                            // Find the position of the previous line and add the "_Prev" prefix
+                            size_t prevLinePos = i - 1;
+                            if (prevLinePos < fileLines.size()) {
+                                fileLines[prevLinePos] += "_Prev";
+                            }
+
+                            // Add "//" in front of the line containing "_Prev"
+                            if (i + 2 < fileLines.size()) {
+                                fileLines[i + 2] = "//" + fileLines[i + 2];
+                            }
+
+                            // Reset the revision number in the original line
+                            size_t revStartPos = line.find_last_of('"') - 1;
+                            size_t revEndPos = line.find_last_of('"');
+                            line.replace(revStartPos, revEndPos - revStartPos, "01");
+
+                            break;  // Exit the loop after processing the line
+                        } else {
+                            std::cout << "Invalid input for main version. Please enter 3 digits." << std::endl;
+                        }
+                    }
                 }
-
-                // Comment out the original line and add the new main version line
-                std::string commentedLine = "//" + line;
-                std::string newMainVersionLine = line.substr(0, startPos) + newMainVersion + line.substr(endPos);
-                fileLines[i] = commentedLine;  // Replace the original line with the commented line
-                fileLines.insert(fileLines.begin() + i + 1, newMainVersionLine);  // Insert the new line
-
-                // Reset the revision number in the original line
-                size_t revStartPos = line.find_last_of('"') - 1;
-                size_t revEndPos = line.find_last_of('"');
-                line.replace(revStartPos, revEndPos - revStartPos, "01");
-
-                break;  // Exit the loop after processing the line
             }
         }
     }
 }
-
 
 
 void updateRevision(std::vector<std::string>& fileLines, const std::string& filePath, const std::string& newMainVersion = "") {
@@ -154,7 +163,7 @@ void updateRevision(std::vector<std::string>& fileLines, const std::string& file
 
 
 int main() {
-	// Log the version change at the beginning of the program
+    // Log the version change at the beginning of the program
     updateLogFile("path_to_input_file", "new_main_version", "new_revision");
 
     while (true) {
@@ -193,50 +202,22 @@ int main() {
             std::cout << "Enter the new main version (3 digits): ";
             std::string newMainVersion;
             std::getline(std::cin, newMainVersion);
-
-            if (newMainVersion.length() != 3 || !std::all_of(newMainVersion.begin(), newMainVersion.end(), ::isdigit)) {
-                std::cout << "Invalid input for main version. Please enter 3 digits." << std::endl;
-            } else {
-                for (std::string& fileLine : fileLines) {
-                    if (fileLine.find("const Vi_Version") != std::string::npos) {
-                        size_t startPos = fileLine.find('"', fileLine.find_last_of('"') - 2) + 1;
-                        size_t endPos = fileLine.find('"', startPos);
-                        std::string mainVersion = fileLine.substr(startPos, endPos - startPos);
-
-
-                        // Create variables for each part of the line
-                        std::string name, date, revision, dummy1, dummy2, dummy3, hp;
-                        std::istringstream iss(fileLine);
-                        iss >> dummy1 >> dummy2 >> name >> date >> revision >> dummy3 >> hp;
-
-						// Update main version and recreate the line
-						mainVersion = newMainVersion;
-						std::stringstream updatedLine;
-						updatedLine << "const Vi_Version " << name << " (        \"" << name << "\",         \"" << date << "\", \"" << mainVersion << "\", \"01\", \"" << dummy3 << "\", \"\", \"" << hp << "\");";
-						fileLine = updatedLine.str();
-						break;
-
-
-                    }
-                }
-
-                std::ofstream outputFile(filePath);
-                for (const std::string& updatedLine : fileLines) {
-                    outputFile << updatedLine << "\n";
-                }
-                outputFile.close();
-
-                updateLogFile(filePath, newMainVersion, "01");
-
-                std::cout << "Main version has been updated to " << newMainVersion << " for file " << fileName << std::endl;
-            }
-       } else if (option == 2) {
-			updateRevision(fileLines, filePath);
+            updateMainVersion(fileLines, newMainVersion);
+        } else if (option == 2) {
+            updateRevision(fileLines, filePath);
             updateLogFile(filePath, "new_main_version", "new_revision");
         } else {
             std::cout << "Invalid option. Please select '1' or '2'." << std::endl;
             continue;
         }
+
+        std::ofstream outputFile(filePath);
+        for (const std::string& updatedLine : fileLines) {
+            outputFile << updatedLine << "\n";
+        }
+        outputFile.close();
+
+        std::cout << "File has been updated." << std::endl;
 
         std::cout << "Do you want to continue? (Press '0' or 'q' to quit, any other key to continue): ";
         std::string quitChoice;

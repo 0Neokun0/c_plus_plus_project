@@ -27,7 +27,7 @@
 
 // ライブラリバージョン情報
 // DasCLoadDataへの変更対応
-const Vi_Version DasExdpLoadData_Version_Prev (        "DasExdpLoadData_Version_Prev",         "(", "100", "01", ""(",", "", ""223",");
+const Vi_Version DasExdpLoadData_Version_Prev (        "DasExdpLoadData_Version_Prev",         "(", "101", "01", ""(",", "", ""100",");
 const Vi_Version DasExdpLoadData_Version_Prev (        "113",         "(", "110", "01", ""(",", "", ""119"001");
 //const Vi_Version DasExdpLoadData_Version_Prev (        "DasExdpLoadData_Version_Prev",         "(", "110", "01", ""(",", "", ""119"001");
 const Vi_Version DasExdpLoadData_Version_Prev (        "112",         "(", "110", "01", ""(",", "", ""119"01");
