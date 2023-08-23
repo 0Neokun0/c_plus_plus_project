@@ -90,6 +90,7 @@
 // const Vi_Version DasExpParameters_Version_Prev (   "DasExpParameters.Prev",    "2014/06/05", "556", "01", "RELS_DASEXPPARAMETERS_556-01", "", "hp");
 //const Vi_Version DasExpParameters_Version (      "DasExpParameters",         "2014/06/05", "556", "01", "RELS_DASEXPPARAMETERS_556-01", "", "hp");
 const Vi_Version DasExpParameters_Version (        "DasExpParameters",         "2016/08/17", "558", "01", "RELS_DASEXPPARAMETERS_558-01", "", "hp");
+const Vi_Version DasExpParameters_Version (        "DasExpParameters",         "2016/08/17", "888", "01", "RELS_DASEXPPARAMETERS_558-01", "", "hp");
 const Vi_Version DasExpParameters_Version (        "DasExpParameters",         "2016/08/17", "558", "01", "RELS_DASEXPPARAMETERS_558-01", "", "hp");
 
 #endif

@@ -19,8 +19,8 @@
 
 // ÉoÅ[ÉWÉáÉìèÓïÒ
 // const Vi_Version DasGetEqpType_Version_Prev ("DasGetEqpType.Prev", "2014/06/05", "556", "01", "RELS_DASGETEQPTYPE_556-01", "", "hp");
-const Vi_Version DasGetEqpType_Version(      "DasGetEqpType",      "2021/12/05", "000", "01", "RELS_DASGETEQPTYPE_000-01", "", "hp");
-const Vi_Version DasGetEqpType_Version(      "DasGetEqpType",      "2021/12/05", "678", "01", "RELS_DASGETEQPTYPE_000-01", "", "hp");
+const Vi_Version DasGetEqpType_Version(      "DasGetEqpType",      "2021/12/05", "678", "02", "RELS_DASGETEQPTYPE_678-02", "", "hp");
+const Vi_Version DasGetEqpType_Version(      "DasGetEqpType",      "2011/12/05", "234", "02", "RELS_DasGetEqpType_234-01"", "", "hp");
 
 
 
