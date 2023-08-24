@@ -7,8 +7,10 @@
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
-#include <chrono> // Add this include for getting the current date
+#include <chrono>
 #include <regex>
+#define NOMINMAX // Add this line before including Windows.h
+#include <Windows.h>
 
 bool fileExists(const std::string &filePath)
 {
@@ -147,47 +149,57 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
                 newVersionLine.replace(versionNumberPos, elements[2].length(), newMainVersion);
             }
 
-			// Reset Revision element to "01"
-			size_t revisionPos = newVersionLine.find(elements[3]);
-			if (revisionPos != std::string::npos) {
-				newVersionLine.replace(revisionPos, elements[3].length(), "01");
-			}
+            // Check if the current revision is greater than "01" and reset if necessary
+            size_t currentRevisionPos = newVersionLine.find(elements[3]);
+            if (currentRevisionPos != std::string::npos)
+            {
+                size_t endRevisionPos = newVersionLine.find("\"", currentRevisionPos + 1);
+                if (endRevisionPos != std::string::npos)
+                {
+                    std::string currentRevision = newVersionLine.substr(currentRevisionPos + 1, endRevisionPos - currentRevisionPos - 1); // Extract revision
+                    if (std::stoi(currentRevision) > 1)                                                                                   // Convert string to integer and check if greater than 1
+                    {
+                        newVersionLine.replace(currentRevisionPos + 1, endRevisionPos - currentRevisionPos - 1, "01"); // Reset revision to "01"
+                    }
+                }
+            }
 
-			// Reset Identifier element with new main version and revision
-			size_t identifierPos = newVersionLine.find(elements[4]);
-			if (identifierPos != std::string::npos) {
-				std::string identifier = elements[4];
-				size_t dashPos = identifier.find('-');
-				if (dashPos != std::string::npos) {
-					// Update the identifier to include the main version and reset revision
-					identifier = "RELS_" + elements[0] + "_" + newMainVersion + "-01\"";
-					newVersionLine.replace(identifierPos, elements[4].length(), identifier);
-				}
-			}
+            // Format the current date in "YYYY/MM/DD" format
+            auto now = std::chrono::system_clock::now();
+            auto timeinfo = std::chrono::system_clock::to_time_t(now);
+            struct tm localTime;
+            _localtime64_s(&localTime, &timeinfo);
 
+            std::ostringstream formattedDate;
+            formattedDate << std::setw(4) << std::setfill('0') << (localTime.tm_year + 1900) << "/"
+                          << std::setw(2) << std::setfill('0') << (localTime.tm_mon + 1) << "/"
+                          << std::setw(2) << std::setfill('0') << localTime.tm_mday;
 
-            // Replace Date element with current date
+            // Replace the existing date with the new formatted date
             size_t datePos = newVersionLine.find(elements[1]);
             if (datePos != std::string::npos)
             {
-                std::string currentDate = elements[1];
-                auto now = std::chrono::system_clock::now();
-                std::time_t time = std::chrono::system_clock::to_time_t(now);
-                std::tm timeinfo = getLocalTime(&time);
-                std::ostringstream formattedDate;
-                formattedDate << std::put_time(&timeinfo, "\"%Y/%m/%d\"");
-                newVersionLine.replace(datePos, currentDate.length(), formattedDate.str());
+                newVersionLine.replace(datePos + 1, elements[1].length(), formattedDate.str());
             }
 
-            // Replace Identifier element with correct format
-            size_t identifierStartPos = newVersionLine.find("\"" + elements[4]);
-            if (identifierStartPos != std::string::npos)
+            // Correct Identifier element format
+            size_t identifierPos = newVersionLine.find(elements[4]);
+            if (identifierPos != std::string::npos)
             {
-                size_t identifierEndPos = newVersionLine.find("\"", identifierStartPos + 1);
-                if (identifierEndPos != std::string::npos)
+                std::string identifier = elements[4];
+                size_t dashPos = identifier.find('-');
+                if (dashPos != std::string::npos)
                 {
-                    newVersionLine.replace(identifierStartPos, identifierEndPos - identifierStartPos + 1, "\"" + elements[4]);
+                    identifier = "RELS_" + elements[0] + "_" + newMainVersion + "-01";
+                    newVersionLine.replace(identifierPos, elements[4].length(), identifier);
                 }
+            }
+
+            // Reset Revision element to "01"
+            size_t revisionPos = newVersionLine.find(elements[3]);
+            if (revisionPos != std::string::npos)
+            {
+                newVersionLine.replace(revisionPos, elements[3].length(), "01");
             }
 
             // Insert the new line below the current main version line

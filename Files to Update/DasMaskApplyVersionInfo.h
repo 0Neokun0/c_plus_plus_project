@@ -1,5 +1,4 @@
 /*! @file DasMaskApplyVersionInfo.h
-const Vi_Version DasMaskApply_Version ("DasMaskApply", "2014/06/05", "556", "01", "RELS_DASMASKAPPLY_556-01", "015"hp");
 
  @brief バージョン情報
  
@@ -94,6 +93,6 @@ const Vi_Version DasMaskApply_Version ("DasMaskApply", "2014/06/05", "556", "01"
 
 // バージョン情報
 const Vi_Version DasMaskApply_Version_Prev ("DasMaskApply.Prev", "2012/10/02", "525", "01", "RELS_DAS_525_01", "", "hp");
-const Vi_Version DasMaskApply_Version ("DasMaskApply", "2014/06/05", "556", "01", "RELS_DASMASKAPPLY_556-01", "", "hp");
+const Vi_Version DasMaskApply_Version ("DasMaskApply", "2014/06/05", "556", "02", "RELS_DASMASKAPPLY_556-02", "", "hp");
 
 #endif
