@@ -2,7 +2,7 @@
 
  @brief バージョン情報
  
- @author t.kawabuchi
+ @author t.kawabuchis
  
  @date	2021/12/05 新規作成
  
