@@ -12,17 +12,13 @@
 #define NOMINMAX // Add this line before including Windows.h
 #include <Windows.h>
 
-std::string getDatetimeStr()
+// Function to get the current date in "yyyy/mm/dd" format
+std::string getCurrentDate()
 {
-    time_t t = time(nullptr);
-    tm localTime;
-    localtime_s(&localTime, &t);
-
-    std::stringstream s;
-    s << localTime.tm_year + 1900;
-    s << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mon + 1;
-    s << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mday;
-    return s.str();
+    std::time_t now = std::time(nullptr);
+    char dateBuffer[11]; // 10 characters for "yyyy/mm/dd" plus the null terminator
+    std::strftime(dateBuffer, sizeof(dateBuffer), "%Y/%m/%d", std::localtime(&now));
+    return dateBuffer;
 }
 
 // Check if a file exists at the given file path
@@ -220,13 +216,19 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
                 }
             }
 
-            std::string newDate = getDatetimeStr();
-
             // Update the Date element with the new formatted date
             size_t datePos = newVersionLine.find("\"" + elements[1] + "\"");
             if (datePos != std::string::npos)
             {
-                newVersionLine.replace(datePos + 1, newDate.length(), newDate);
+                std::string newDate = getCurrentDate(); // Get the current date in "yyyy/mm/dd" format
+
+                // Update the Date element with the new formatted date
+                size_t dateStartPos = newVersionLine.find("\"", datePos);
+                size_t dateEndPos = newVersionLine.find("\"", dateStartPos + 1);
+                if (dateStartPos != std::string::npos && dateEndPos != std::string::npos)
+                {
+                    newVersionLine.replace(dateStartPos + 1, dateEndPos - dateStartPos - 1, newDate);
+                }
             }
 
             // Correct Identifier element format
@@ -237,8 +239,10 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
                 size_t dashPos = identifier.find('-');
                 if (dashPos != std::string::npos)
                 {
+                    // Construct the new identifier
+                    std::string identifier = "RELS_" + elements[0] + "_" + newMainVersion + "-01";
+
                     // Update the Identifier with the new version and revision
-                    identifier = "RELS_" + elements[0] + "_" + newMainVersion + "-01";
                     newVersionLine.replace(identifierPos, elements[4].length(), identifier);
                 }
                 // Remove extra spaces from elements
@@ -370,12 +374,26 @@ void updateRevision(std::vector<std::string> &fileLines, const std::string &file
     int incrementedRevision = std::stoi(currentRevision) + 1;
     std::string newRevision = (incrementedRevision < 10) ? "0" + std::to_string(incrementedRevision) : std::to_string(incrementedRevision);
 
-    // Step 6: Create the new line with updated revision number
+    // Format the current date in "yyyy/mm/dd" format
+    time_t t = time(nullptr);
+    tm localTime;
+    localtime_s(&localTime, &t);
+    std::stringstream formattedDate;
+    formattedDate << localTime.tm_year + 1900 << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mon + 1 << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mday;
+
+    // Step 6: Create the new line with updated revision number and formatted date
     std::string newRevisionLine = mainVersionLine;
     size_t revisionPos = newRevisionLine.find("\"" + currentRevision + "\"");
     if (revisionPos != std::string::npos)
     {
         newRevisionLine.replace(revisionPos + 1, currentRevision.length(), newRevision);
+    }
+
+    // Update the Date element with the new formatted date
+    size_t datePos = newRevisionLine.find("\"" + elements[1] + "\"");
+    if (datePos != std::string::npos)
+    {
+        newRevisionLine.replace(datePos + 1, formattedDate.str().length(), formattedDate.str());
     }
 
     // Step 7: Insert the new revision line below the main version line
