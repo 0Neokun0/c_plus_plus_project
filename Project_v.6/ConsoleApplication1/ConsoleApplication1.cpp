@@ -419,7 +419,9 @@ void updateRevision(std::vector<std::string> &fileLines, const std::string &file
         size_t revisionEndPos = identifier.find("\"", revisionStartPos);
         if (revisionEndPos != std::string::npos)
         {
-            identifier.replace(revisionStartPos, revisionEndPos - revisionStartPos, newRevision);
+            int incrementedRevision = std::stoi(currentRevision) + 1;
+            std::string newIdentifier = identifier.substr(0, revisionStartPos) + std::to_string(incrementedRevision) + identifier.substr(revisionEndPos);
+            identifier = newIdentifier;
         }
     }
 
@@ -572,6 +574,6 @@ int main()
     return 0;
 }
 
-// Reamaining is date format
-// Revision increment in identifier while revision update
+// Reamaining is date format (50 %)
+// Revision increment in identifier while revision update ( code is okay but the output is bad)
 // new line characters in caps in identifier during main and revision

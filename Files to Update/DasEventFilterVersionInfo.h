@@ -75,5 +75,6 @@
 
 // ライブラリバージョン情報
 const Vi_Version DasEventFilter_Version_Prev ("DasEventFilter.Prev", "2013/05/28", "552", "02", "RELS_DAS_552_02", "", "hp");
-const Vi_Version DasEventFilter_Version ("DasEventFilter", "2014/06/05", "556", "01", "RELS_DASEVENTFILTER_556-01", "", "hp");
+//const Vi_Version DasEventFilter_Version ("DasEventFilter", "2014/06/05", "556", "01", "RELS_DASEVENTFILTER_556-01", "", "hp");
+const Vi_Version DasEventFilter_Version ("DasEventFilter", "2023/08/26", "556", "02", "RELS_DASEVENTFILTER_556-01", "", "hp");
 #endif
