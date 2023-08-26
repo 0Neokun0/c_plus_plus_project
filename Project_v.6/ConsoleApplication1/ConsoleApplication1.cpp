@@ -196,6 +196,14 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
                 newVersionLine.replace(versionNumberPos, elements[2].length(), newMainVersion);
             }
 
+            // Remove extra spaces
+            size_t pos = newVersionLine.find("  ");
+            while (pos != std::string::npos)
+            {
+                newVersionLine.replace(pos, 2, " ");
+                pos = newVersionLine.find("  ", pos);
+            }
+
             // Check if the current revision is greater than "01" and reset if necessary
             size_t currentRevisionPos = newVersionLine.find(elements[3]);
             if (currentRevisionPos != std::string::npos)
@@ -232,6 +240,17 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
                     // Update the Identifier with the new version and revision
                     identifier = "RELS_" + elements[0] + "_" + newMainVersion + "-01";
                     newVersionLine.replace(identifierPos, elements[4].length(), identifier);
+                }
+                // Remove extra spaces from elements
+                for (size_t i = 0; i < elements.size(); ++i)
+                {
+                    // Trim spaces at the beginning and end of each element
+                    size_t startPos = elements[i].find_first_not_of(" ");
+                    size_t endPos = elements[i].find_last_not_of(" ");
+                    if (startPos != std::string::npos && endPos != std::string::npos)
+                    {
+                        elements[i] = elements[i].substr(startPos, endPos - startPos + 1);
+                    }
                 }
             }
 
@@ -536,3 +555,5 @@ int main()
 }
 
 // Reamaining is date format
+// Revision increment in identifier while revision update
+// new line characters in caps in identifier during main and revision
