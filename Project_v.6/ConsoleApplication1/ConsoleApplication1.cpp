@@ -12,17 +12,16 @@
 #define NOMINMAX // Add this line before including Windows.h
 #include <Windows.h>
 
-std::string getDatetimeStr() {
+std::string getDatetimeStr()
+{
     time_t t = time(nullptr);
-    const tm* localTime = localtime(&t);
+    tm localTime;
+    localtime_s(&localTime, &t);
+
     std::stringstream s;
-    s << localTime->tm_year + 1900;
-    // setw(),setfill()‚Å0‹l‚ß
-    s << "/" << std::setw(2) << std::setfill('0') << localTime->tm_mon + 1;
-    s << "/" << std::setw(2) << std::setfill('0') << localTime->tm_mday;
-
- 
-
+    s << localTime.tm_year + 1900;
+    s << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mon + 1;
+    s << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mday;
     return s.str();
 }
 
@@ -213,20 +212,7 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
                 }
             }
 
-            // Format the current date in "YYYY/MM/DD" format
-            //auto now = std::chrono::system_clock::now();
-            /*auto timeinfo = std::chrono::system_clock::to_time_t(now);
-            struct tm localTime;
-            _localtime64_s(&localTime, &timeinfo);
-
-            std::ostringstream formattedDate;
-            formattedDate << "\"" << std::setw(4) << std::setfill('0') << (localTime.tm_year + 1900) << "/"
-                        << std::setw(2) << std::setfill('0') << (localTime.tm_mon + 1) << "/"
-                        << std::setw(2) << std::setfill('0') << localTime.tm_mday << "\"";*/
-
             std::string newDate = getDatetimeStr();
-
-
 
             // Update the Date element with the new formatted date
             size_t datePos = newVersionLine.find("\"" + elements[1] + "\"");
@@ -261,7 +247,40 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
             if (it != fileLines.end())
             {
                 // Add "_Prev" to the current main version line
-                *it += "_Prev";
+                size_t versionPos = it->find("_Version");
+                if (versionPos != std::string::npos)
+                {
+                    size_t parenthesisPos = it->find("(", versionPos);
+                    if (parenthesisPos != std::string::npos)
+                    {
+                        *it = it->substr(0, parenthesisPos) + "_Prev" + it->substr(parenthesisPos);
+
+                        size_t componentStartPos = it->find("\"", parenthesisPos);
+                        size_t componentEndPos = it->find("\"", componentStartPos + 1);
+                        if (componentStartPos != std::string::npos && componentEndPos != std::string::npos)
+                        {
+                            std::string component = it->substr(componentStartPos + 1, componentEndPos - componentStartPos - 1);
+                            std::string modifiedComponent = component + ".Prev";
+                            *it = it->substr(0, componentStartPos + 1) + modifiedComponent + it->substr(componentEndPos);
+
+                            // Remove extra spaces
+                            size_t pos = it->find("  ");
+                            while (pos != std::string::npos)
+                            {
+                                it->replace(pos, 2, " ");
+                                pos = it->find("  ");
+                            }
+
+                            // Trim spaces at the beginning and end of the line
+                            size_t startPos = it->find_first_not_of(" ");
+                            size_t endPos = it->find_last_not_of(" ");
+                            if (startPos != std::string::npos && endPos != std::string::npos)
+                            {
+                                *it = it->substr(startPos, endPos - startPos + 1);
+                            }
+                        }
+                    }
+                }
 
                 // Find the position of the newly added line
                 size_t newPos = std::distance(fileLines.begin(), it);
@@ -309,8 +328,8 @@ void updateRevision(std::vector<std::string> &fileLines, const std::string &file
 
     // Initialize element descriptions using a loop
     std::vector<std::string> elementDescriptions(7);
-	// extract first line 
-	// .append 
+    // extract first line
+    // .append
     elementDescriptions[0] = "Element: Component";
     elementDescriptions[1] = "Element: Date";
     elementDescriptions[2] = "Element: Main Version";
