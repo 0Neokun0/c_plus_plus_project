@@ -29,29 +29,27 @@ std::string getCurrentDate()
     return dateBuffer;
 }
 
-
-
-//std::string getDatetimeStr() {
+// std::string getDatetimeStr() {
 //
-//    time_t t = time(nullptr);
+//     time_t t = time(nullptr);
 //
-//    const tm* localTime = localtime(&t);
+//     const tm* localTime = localtime(&t);
 //
-//    std::stringstream s;
+//     std::stringstream s;
 //
-//    s << localTime->tm_year + 1900;
+//     s << localTime->tm_year + 1900;
 //
-//    // setw(),setfill()‚Å0‹l‚ß
+//     // setw(),setfill()‚Å0‹l‚ß
 //
-//    s << "/" << std::setw(2) << std::setfill('0') << localTime->tm_mon + 1;
+//     s << "/" << std::setw(2) << std::setfill('0') << localTime->tm_mon + 1;
 //
-//    s << "/" << std::setw(2) << std::setfill('0') << localTime->tm_mday;
+//     s << "/" << std::setw(2) << std::setfill('0') << localTime->tm_mday;
 //
-// 
 //
-//    return s.str();
 //
-//}
+//     return s.str();
+//
+// }
 
 // Check if a file exists at the given file path
 bool fileExists(const std::string &filePath)
@@ -237,19 +235,19 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
                 }
             }
 
-    // Format the current date in "yyyy/mm/dd" format
-    time_t t = time(nullptr);
-    tm localTime;
-    localtime_s(&localTime, &t);
-    std::stringstream formattedDate;
-    formattedDate << localTime.tm_year + 1900 << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mon + 1 << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mday;
+            // Format the current date in "yyyy/mm/dd" format
+            time_t t = time(nullptr);
+            tm localTime;
+            localtime_s(&localTime, &t);
+            std::stringstream formattedDate;
+            formattedDate << localTime.tm_year + 1900 << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mon + 1 << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mday;
 
-    // Update the Date element with the new formatted date
-    size_t datePos = newVersionLine.find("\"" + elements[1] + "\"");
-    if (datePos != std::string::npos)
-    {
-        newVersionLine.replace(datePos + 1, formattedDate.str().length(), formattedDate.str());
-    }
+            // Update the Date element with the new formatted date
+            size_t datePos = newVersionLine.find("\"" + elements[1] + "\"");
+            if (datePos != std::string::npos)
+            {
+                newVersionLine.replace(datePos + 1, formattedDate.str().length(), formattedDate.str());
+            }
 
             // Correct Identifier element format and update it
             size_t identifierPos = newVersionLine.find(elements[4]);
@@ -312,7 +310,7 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
                     size_t parenthesisPos = it->find("(", versionPos);
                     if (parenthesisPos != std::string::npos)
                     {
-                        *it = it->substr(0, parenthesisPos) + "_Prev" + it->substr(parenthesisPos);
+                        *it = it->substr(0, parenthesisPos - 1) + "_Prev" + it->substr(parenthesisPos - 1);
 
                         size_t componentStartPos = it->find("\"", parenthesisPos);
                         size_t componentEndPos = it->find("\"", componentStartPos + 1);
