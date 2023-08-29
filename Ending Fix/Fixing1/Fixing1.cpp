@@ -29,27 +29,25 @@ std::string getCurrentDate()
     return dateBuffer;
 }
 
-// std::string getDatetimeStr() {
-//
-//     time_t t = time(nullptr);
-//
-//     const tm* localTime = localtime(&t);
-//
-//     std::stringstream s;
-//
-//     s << localTime->tm_year + 1900;
-//
-//     // setw(),setfill()‚Å0‹l‚ß
-//
-//     s << "/" << std::setw(2) << std::setfill('0') << localTime->tm_mon + 1;
-//
-//     s << "/" << std::setw(2) << std::setfill('0') << localTime->tm_mday;
-//
-//
-//
-//     return s.str();
-//
-// }
+std::string getDatetimeStr()
+{
+    time_t t = time(nullptr);
+
+    struct tm localTime;
+    if (localtime_s(&localTime, &t) != 0)
+    {
+        // Handle the error if localtime_s fails
+        // For example, you could return an empty string or a default value
+        return "";
+    }
+
+    std::stringstream s;
+    s << localTime.tm_year + 1900;
+    s << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mon + 1;
+    s << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mday;
+
+    return s.str();
+}
 
 // Check if a file exists at the given file path
 bool fileExists(const std::string &filePath)
@@ -140,6 +138,7 @@ void updateLogFile(const std::string &logFilePath, const std::string &fileName, 
 // Function to update the main version in a file
 void updateMainVersion(std::vector<std::string> &fileLines, const std::string &filePath, const std::string &fileName)
 {
+    std::string newVersionLine;
     // Find the current main version line in the list of file lines
     std::string mainVersionLine = findMainVersionLine(fileLines);
     if (!mainVersionLine.empty())
@@ -159,15 +158,16 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
         }
 
         // Display extracted elements with descriptions
-        std::vector<std::string> elementDescriptions(7);
+        std::vector<std::string> elementDescriptions(8);
         // Descriptions for each element
-        elementDescriptions[0] = "Element: Component";
-        elementDescriptions[1] = "Element: Date";
-        elementDescriptions[2] = "Element: Main Version";
-        elementDescriptions[3] = "Element: Revision";
-        elementDescriptions[4] = "Element: Identifier";
-        elementDescriptions[5] = "Element: Unknown1";
-        elementDescriptions[6] = "Element: Unknown2";
+        elementDescriptions[0] = "Element: const Vi_Version";
+        elementDescriptions[1] = "Element: Component";
+        elementDescriptions[2] = "Element: Date";
+        elementDescriptions[3] = "Element: Main Version";
+        elementDescriptions[4] = "Element: Revision";
+        elementDescriptions[5] = "Element: Identifier";
+        elementDescriptions[6] = "Element: Unknown1";
+        elementDescriptions[7] = "Element: Unknown2";
 
         // Display element descriptions along with their extracted values
         for (size_t i = 0; i < elements.size() && i < elementDescriptions.size(); ++i)
@@ -203,7 +203,6 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
                     newVersionLine.replace(startPos, elements[i].length() + 2, "\"" + elements[i] + "\"");
                 }
             }
-
             // Update the Main Version element with the new version number
             size_t versionNumberPos = newVersionLine.find(elements[2]);
             if (versionNumberPos != std::string::npos)
@@ -219,34 +218,22 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
                 pos = newVersionLine.find("  ", pos);
             }
 
-            // Check if the current revision is greater than "01" and reset if necessary
-            size_t currentRevisionPos = newVersionLine.find(elements[3]);
-            if (currentRevisionPos != std::string::npos)
+            // Find the position of the current main version line
+            auto mainVersionIt = std::find(fileLines.begin(), fileLines.end(), mainVersionLine);
+            if (mainVersionIt != fileLines.end())
             {
-                size_t endRevisionPos = newVersionLine.find("\"", currentRevisionPos + 1);
-                if (endRevisionPos != std::string::npos)
-                {
-                    // Extract the current revision value and reset if greater than 1
-                    std::string currentRevision = newVersionLine.substr(currentRevisionPos + 1, endRevisionPos - currentRevisionPos - 1);
-                    if (std::stoi(currentRevision) > 1)
-                    {
-                        newVersionLine.replace(currentRevisionPos + 1, endRevisionPos - currentRevisionPos - 1, "01");
-                    }
-                }
+                // Calculate the position of the new version line
+                size_t newPos = std::distance(fileLines.begin(), mainVersionIt) + 1;
+
+                               // Print the new version line
+                std::cout << "New Version Line: " << newVersionLine << std::endl;
             }
 
-            // Format the current date in "yyyy/mm/dd" format
-            time_t t = time(nullptr);
-            tm localTime;
-            localtime_s(&localTime, &t);
-            std::stringstream formattedDate;
-            formattedDate << localTime.tm_year + 1900 << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mon + 1 << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mday;
-
-            // Update the Date element with the new formatted date
-            size_t datePos = newVersionLine.find("\"" + elements[1] + "\"");
-            if (datePos != std::string::npos)
+            // Reset the Revision element to "01"
+            size_t revisionPos = newVersionLine.find(elements[3]);
+            if (revisionPos != std::string::npos)
             {
-                newVersionLine.replace(datePos + 1, formattedDate.str().length(), formattedDate.str());
+                newVersionLine.replace(revisionPos, elements[3].length(), "01");
             }
 
             // Correct Identifier element format and update it
@@ -273,85 +260,105 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
                 newVersionLine.replace(identifierPos, elements[4].length(), identifier);
             }
 
-            // Update the main version number in the newVersionLine
-            size_t mainVersionPos = newVersionLine.find(elements[2]);
-            if (mainVersionPos != std::string::npos)
+            // Update the Date element with the new formatted date
+            size_t datePos = newVersionLine.find("\"" + elements[1] + "\"");
+            if (datePos != std::string::npos)
             {
-                newVersionLine.replace(mainVersionPos, elements[2].length(), newMainVersion);
+                std::string formattedDate = getDatetimeStr();
+                newVersionLine.replace(datePos + 1, elements[1].length(), formattedDate);
             }
 
-            // Remove extra spaces from elements
-            for (size_t i = 0; i < elements.size(); ++i)
+            // Check if the current revision is greater than "01" and reset if necessary
+            size_t currentRevisionPos = newVersionLine.find(elements[3]);
+            if (currentRevisionPos != std::string::npos)
             {
-                // Trim spaces at the beginning and end of each element
-                size_t startPos = elements[i].find_first_not_of(" ");
-                size_t endPos = elements[i].find_last_not_of(" ");
-                if (startPos != std::string::npos && endPos != std::string::npos)
+                size_t endRevisionPos = newVersionLine.find("\"", currentRevisionPos + 1);
+                if (endRevisionPos != std::string::npos)
                 {
-                    elements[i] = elements[i].substr(startPos, endPos - startPos + 1);
-                }
-            }
-
-            // Reset Revision element to "01"
-            size_t revisionPos = newVersionLine.find(elements[3]);
-            if (revisionPos != std::string::npos)
-            {
-                newVersionLine.replace(revisionPos, elements[3].length(), "01");
-            }
-
-            // Insert the new line below the current main version line
-            auto it = std::find(fileLines.begin(), fileLines.end(), mainVersionLine);
-            if (it != fileLines.end())
-            {
-                // Add "_Prev" to the current main version line
-                size_t versionPos = it->find("_Version");
-                if (versionPos != std::string::npos)
-                {
-                    size_t parenthesisPos = it->find("(", versionPos);
-                    if (parenthesisPos != std::string::npos)
+                    // Extract the current revision value and reset if greater than 1
+                    std::string currentRevision = newVersionLine.substr(currentRevisionPos + 1, endRevisionPos - currentRevisionPos - 1);
+                    if (std::stoi(currentRevision) > 1)
                     {
-                        *it = it->substr(0, parenthesisPos - 1) + "_Prev" + it->substr(parenthesisPos - 1);
-
-                        size_t componentStartPos = it->find("\"", parenthesisPos);
-                        size_t componentEndPos = it->find("\"", componentStartPos + 1);
-                        if (componentStartPos != std::string::npos && componentEndPos != std::string::npos)
-                        {
-                            std::string component = it->substr(componentStartPos + 1, componentEndPos - componentStartPos - 1);
-                            std::string modifiedComponent = component + ".Prev";
-                            *it = it->substr(0, componentStartPos + 1) + modifiedComponent + it->substr(componentEndPos);
-
-                            // Remove extra spaces
-                            size_t pos = it->find("  ");
-                            while (pos != std::string::npos)
-                            {
-                                it->replace(pos, 2, " ");
-                                pos = it->find("  ");
-                            }
-
-                            // Trim spaces at the beginning and end of the line
-                            size_t startPos = it->find_first_not_of(" ");
-                            size_t endPos = it->find_last_not_of(" ");
-                            if (startPos != std::string::npos && endPos != std::string::npos)
-                            {
-                                *it = it->substr(startPos, endPos - startPos + 1);
-                            }
-                        }
+                        newVersionLine.replace(currentRevisionPos + 1, endRevisionPos - currentRevisionPos - 1, "01");
                     }
                 }
-
-                // Find the position of the newly added line
-                size_t newPos = std::distance(fileLines.begin(), it);
-
-                // Insert the new version line right below the current main version line
-                fileLines.insert(fileLines.begin() + newPos + 1, newVersionLine);
             }
 
-            // Inform the user that the main version is updated
-            std::cout << "Main version updated to " << newMainVersion << std::endl;
+// Insert the new line below the current main version line
+auto it = std::find(fileLines.begin(), fileLines.end(), mainVersionLine);
+if (it != fileLines.end())
+{
+    // Add "_Prev" to the current main version line
+    size_t versionPos = it->find("_Version");
+    if (versionPos != std::string::npos)
+    {
+        size_t parenthesisPos = it->find("(", versionPos);
+        if (parenthesisPos != std::string::npos)
+        {
+            *it = it->substr(0, parenthesisPos - 1) + "_Prev" + it->substr(parenthesisPos - 1);
+
+            size_t componentStartPos = it->find("\"", parenthesisPos);
+            size_t componentEndPos = it->find("\"", componentStartPos + 1);
+            if (componentStartPos != std::string::npos && componentEndPos != std::string::npos)
+            {
+                std::string component = it->substr(componentStartPos + 1, componentEndPos - componentStartPos - 1);
+                std::string modifiedComponent = component + ".Prev";
+                *it = it->substr(0, componentStartPos + 1) + modifiedComponent + it->substr(componentEndPos);
+
+                // Remove extra spaces
+                size_t pos = it->find("  ");
+                while (pos != std::string::npos)
+                {
+                    it->replace(pos, 2, " ");
+                    pos = it->find("  ");
+                }
+
+                // Trim spaces at the beginning and end of the line
+                size_t startPos = it->find_first_not_of(" ");
+                size_t endPos = it->find_last_not_of(" ");
+                if (startPos != std::string::npos && endPos != std::string::npos)
+                {
+                    *it = it->substr(startPos, endPos - startPos + 1);
+                }
+            }
+        }
+    }
+
+    // Find the position of the newly added line
+    size_t newPos = std::distance(fileLines.begin(), it);
+
+    // Construct the new Identifier for the main version line
+    std::string identifier = elements[5]; // Copy the existing Identifier
+    size_t dashPos = identifier.find('-');
+    if (dashPos != std::string::npos)
+    {
+        // Update the main version part of the Identifier with the new main version
+        identifier.replace(dashPos + 1, 3, newMainVersion);
+
+        // Update the Identifier's revision number part to "01"
+        size_t revisionStartPos = identifier.find('-', dashPos);
+        if (revisionStartPos != std::string::npos)
+        {
+            // Update the revision number in the Identifier to "01"
+            identifier.replace(revisionStartPos + 1, 3, "01");
+        }
+    }
+
+    // Update the Identifier in the newVersionLine
+    size_t identifierPos = newVersionLine.find(elements[5]);
+    if (identifierPos != std::string::npos)
+    {
+        newVersionLine.replace(identifierPos, elements[5].length(), identifier);
+    }
+
+    // Insert the new version line right below the current main version line
+    fileLines.insert(fileLines.begin() + newPos + 1, newVersionLine);
+}
 
             // Update the log file with the changes made
             std::string directoryPath = filePath.substr(0, filePath.find_last_of("\\/"));
-            updateLogFile(directoryPath + "\\update_log.txt", fileName, newMainVersion, "");
+            std::string logMessage = newMainVersion + " -> " + newMainVersion;
+            updateLogFile(directoryPath + "\\update_log.txt", fileName, logMessage, "");
         }
         else
         {
@@ -365,6 +372,7 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
         std::cout << "No valid main version line found in the file." << std::endl;
     }
 }
+
 //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -415,18 +423,13 @@ void updateRevision(std::vector<std::string> &fileLines, const std::string &file
         newRevisionLine.replace(revisionPos + 1, currentRevision.length(), newRevision);
     }
 
-    // Format the current date in "yyyy/mm/dd" format
-    time_t t = time(nullptr);
-    tm localTime;
-    localtime_s(&localTime, &t);
-    std::stringstream formattedDate;
-    formattedDate << localTime.tm_year + 1900 << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mon + 1 << "/" << std::setw(2) << std::setfill('0') << localTime.tm_mday;
+    std::string formattedDate = getDatetimeStr();
 
     // Update the Date element with the new formatted date
     size_t datePos = newRevisionLine.find("\"" + elements[1] + "\"");
     if (datePos != std::string::npos)
     {
-        newRevisionLine.replace(datePos + 1, formattedDate.str().length(), formattedDate.str());
+        newRevisionLine.replace(datePos + 1, elements[1].length(), formattedDate);
     }
 
     // Get the revision number from the new line
@@ -453,17 +456,6 @@ void updateRevision(std::vector<std::string> &fileLines, const std::string &file
         newRevisionLine.replace(identifierPos, endPos - identifierPos, identifier);
     }
 
-    // Insert the new revision line below the main version line
-    auto it = std::find(fileLines.begin(), fileLines.end(), mainVersionLine);
-    if (it != fileLines.end())
-    {
-        // Calculate the position to insert the new revision line
-        size_t insertPos = std::distance(fileLines.begin(), it) + 1;
-
-        // Insert the new revision line
-        fileLines.insert(fileLines.begin() + insertPos, newRevisionLine);
-    }
-
     // Step 9: Add comment to the old line
     for (size_t i = 0; i < fileLines.size(); ++i)
     {
@@ -476,7 +468,7 @@ void updateRevision(std::vector<std::string> &fileLines, const std::string &file
 
     // Update the log file with the changes made
     std::string logFilePath = filePath.substr(0, filePath.find_last_of("\\/")) + "\\update_log.txt";
-    updateLogFile(logFilePath, fileName, "", "Revision Changed: " + currentRevision + " -> " + newRevision);
+    updateLogFile(logFilePath, fileName, "", currentRevision + " -> " + newRevision);
 
     // Save the updated lines back to the file (as before)
     std::ofstream outputFile(filePath);
@@ -599,5 +591,3 @@ int main()
 }
 
 // Reamaining is date format (50 %)
-// Revision increment in identifier while revision update ( code is okay but the output is bad)
-// new line characters in caps in identifier during main and revision
