@@ -131,7 +131,16 @@ void updateLogFile(const std::string &logFilePath, const std::string &fileName, 
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 //----------------------------------------------------------------------------------------------------------------------------------------------------------//
-
+std::string trim(const std::string &str)
+{
+    size_t first = str.find_first_not_of(' ');
+    if (std::string::npos == first)
+    {
+        return str;
+    }
+    size_t last = str.find_last_not_of(' ');
+    return str.substr(first, (last - first + 1));
+}
 //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -158,16 +167,16 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
         }
 
         // Display extracted elements with descriptions
-        std::vector<std::string> elementDescriptions(8);
+        std::vector<std::string> elementDescriptions(7);
         // Descriptions for each element
-        elementDescriptions[0] = "Element: const Vi_Version";
-        elementDescriptions[1] = "Element: Component";
-        elementDescriptions[2] = "Element: Date";
-        elementDescriptions[3] = "Element: Main Version";
-        elementDescriptions[4] = "Element: Revision";
-        elementDescriptions[5] = "Element: Identifier";
-        elementDescriptions[6] = "Element: Unknown1";
-        elementDescriptions[7] = "Element: Unknown2";
+
+        elementDescriptions[0] = "Element: Component";
+        elementDescriptions[1] = "Element: Date";
+        elementDescriptions[2] = "Element: Main Version";
+        elementDescriptions[3] = "Element: Revision";
+        elementDescriptions[4] = "Element: Identifier";
+        elementDescriptions[5] = "Element: Unknown1";
+        elementDescriptions[6] = "Element: Unknown2";
 
         // Display element descriptions along with their extracted values
         for (size_t i = 0; i < elements.size() && i < elementDescriptions.size(); ++i)
@@ -188,7 +197,7 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
             {
                 if (line.find("_Prev") != std::string::npos && line.find("//") != 0)
                 {
-                    line = "// " + line;
+                    line = "//" + line;
                 }
             }
 
@@ -261,22 +270,30 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
             auto it = std::find(fileLines.begin(), fileLines.end(), mainVersionLine);
             if (it != fileLines.end())
             {
-                // Add "_Prev" to the current main version line
-                size_t versionPos = it->find("_Version");
-                if (versionPos != std::string::npos)
-                {
-                    size_t parenthesisPos = it->find("(", versionPos);
-                    if (parenthesisPos != std::string::npos)
-                    {
-                        *it = it->substr(0, parenthesisPos - 1) + "_Prev" + it->substr(parenthesisPos - 1);
+    // Add "_Prev" to the current main version line
+    size_t versionPos = it->find("_Version");
+    if (versionPos != std::string::npos)
+    {
+        size_t parenthesisPos = it->find("(", versionPos);
+        if (parenthesisPos != std::string::npos)
+        {
+            *it = it->substr(0, parenthesisPos - 1) + "_Prev" + it->substr(parenthesisPos - 1);
 
-                        size_t componentStartPos = it->find("\"", parenthesisPos);
-                        size_t componentEndPos = it->find("\"", componentStartPos + 1);
-                        if (componentStartPos != std::string::npos && componentEndPos != std::string::npos)
-                        {
-                            std::string component = it->substr(componentStartPos + 1, componentEndPos - componentStartPos - 1);
-                            std::string modifiedComponent = component + ".Prev";
-                            *it = it->substr(0, componentStartPos + 1) + modifiedComponent + it->substr(componentEndPos);
+            size_t componentStartPos = it->find("\"", parenthesisPos);
+            size_t componentEndPos = it->find("\"", componentStartPos + 1);
+            if (componentStartPos != std::string::npos && componentEndPos != std::string::npos)
+            {
+                // Extract the component name between quotes
+                std::string component = it->substr(componentStartPos + 1, componentEndPos - componentStartPos - 1);
+
+                // Remove any leading or trailing spaces from the component name
+                component = trim(component);
+
+                // Append ".Prev" to the component name
+                std::string modifiedComponent = component + ".Prev";
+
+                // Replace the original component with the modified one in the main version line
+                *it = it->substr(0, componentStartPos + 1) + modifiedComponent + it->substr(componentEndPos);
 
                             // Remove extra spaces
                             size_t pos = it->find("  ");

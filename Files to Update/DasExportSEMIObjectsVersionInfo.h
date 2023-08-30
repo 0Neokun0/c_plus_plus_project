@@ -102,7 +102,13 @@
 //const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "005", "07", "RELS_DASEXPSEMIOBJECTS_005-07", "", "hp");
 // const Vi_Version DasExpSEMIObjects_Version_Prev ( "DasExpSEMIObjects.Prev", "2023/08/30", "005", "08", "RELS_DASEXPSEMIOBJECTS_005-08", "", "hp");
 //const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/01/30", "006", "001", "RELS_DASEXPSEMIOBJECTS_006-01", "", "hp");
-const Vi_Version DasExpSEMIObjects_Version_Prev ( "DasExpSEMIObjects.Prev", "2023/08/30", "006", "02", "RELS_DASEXPSEMIOBJECTS_006-02", "", "hp");
-const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2013/08/30", "007", "001", "RELS_DASEXPSEMIOBJECTS_007-01", "", "hp");
+//const Vi_Version DasExpSEMIObjects_Version_Prev ( "DasExpSEMIObjects.Prev", "2023/08/30", "006", "02", "RELS_DASEXPSEMIOBJECTS_006-02", "", "hp");
+//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2013/08/30", "007", "001", "RELS_DASEXPSEMIOBJECTS_007-01", "", "hp");
+//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "007", "02", "RELS_DASEXPSEMIOBJECTS_007-02", "", "hp");
+//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "007", "03", "RELS_DASEXPSEMIOBJECTS_007-03", "", "hp");
+//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "007", "04", "RELS_DASEXPSEMIOBJECTS_007-04", "", "hp");
+//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "007", "05", "RELS_DASEXPSEMIOBJECTS_007-05", "", "hp");
+const Vi_Version DasExpSEMIObjects_Version_Prev ( "DasExpSEMIObjects.Prev", "2023/08/30", "007", "06", "RELS_DASEXPSEMIOBJECTS_007-06", "", "hp");
+const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "008", "01", "RELS_DASEXPSEMIOBJECTS_008-001", "", "hp");
 
 #endif
