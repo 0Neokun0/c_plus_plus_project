@@ -18,8 +18,7 @@
 #include <Utility/VersionInfo/Vi_Version.h>	// ShareëŒâû #include <version_info/Vi_Version.h>
 
 // ÉoÅ[ÉWÉáÉìèÓïÒ
-//const Vi_Version DasGetEqpType_Version_Prev ("DasGetEqpType.Prev", "2014/06/05", "556", "01", "RELS_DASGETEQPTYPE_556-01", "", "hp");
+const Vi_Version DasGetEqpType_Version_Prev ("DasGetEqpType.Prev", "2014/06/05", "556", "01", "RELS_DASGETEQPTYPE_556-01", "", "hp");
 const Vi_Version DasGetEqpType_Version(      "DasGetEqpType",      "2021/12/05", "000", "01", "RELS_DASGETEQPTYPE_000-01", "", "hp");
-const Vi_Version DasGetEqpType_Version( "DasGetEqpType", "2021/12/05", "214", "01", "RELS_DASGETEQPTYPE_000_214-01", "", "hp");
 
 #endif

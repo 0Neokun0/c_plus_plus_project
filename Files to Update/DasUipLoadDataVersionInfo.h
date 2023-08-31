@@ -26,7 +26,11 @@
 
 // ライブラリバージョン情報
 // DasMLoadDataへの変更対応
-const Vi_Version DasUipLoadData_Version_Prev ("DasUipLoadData", "2014/06/05", "556", "01", "RELS_DASUIPLOADDATA_556-01", "", "hp");
-const Vi_Version DasMLoadData_Version        ("DasMLoadData",   "2021/12/05", "000", "01", "RELS_DASMLOADDATA_000-01", "", "hp");
+//const Vi_Version DasUipLoadData_Version_Prev ("DasUipLoadData", "2014/06/05", "556", "01", "RELS_DASUIPLOADDATA_556-01", "", "hp");
+//const Vi_Version DasMLoadData_Version _Prev ("DasMLoadData.Prev", "2021/12/05", "000", "01", "RELS_DASMLOADDATA_000-01", "", "hp");
+//const Vi_Version DasMLoadData_Version( "DasMLoadData", "2021/12/05", "888", "01", "RELS_DASMLOADDATA_888-01", "", "hp");
+//const Vi_Version DasMLoadData_Versio_Prevn( "DasMLoadData.Prev", "2023/08/31", "888", "02", "RELS_DASMLOADDATA_888-02", "", "hp");
+const Vi_Version DasMLoadData_Versio_Prevn( "DasMLoadData.Prev", "2023/08/31", "777", "02", "RELS_DASMLOADDATA_777-02", "", "hp");
+const Vi_Version DasMLoadData_Version( "DasMLoadData", "2023/08/31", "002", "02", "RELS_DASMLOADDATA_2-02", "", "hp");
 
 #endif

@@ -207,6 +207,12 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
         std::cout << "Enter the new main version (3 digits): ";
         std::getline(std::cin, newMainVersion);
 
+        // Add leading zeros to the new main version number if needed
+        while (newMainVersion.length() < 3)
+        {
+            newMainVersion = "0" + newMainVersion;
+        }
+
         std::string newRevision;
         if (newMainVersion.length() == 3 && std::all_of(newMainVersion.begin(), newMainVersion.end(), ::isdigit))
         {
@@ -238,15 +244,15 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
         }
 
         // Construct the new main version line with updated main version, revision numbers, and modified identifier
-std::string currentDate = getCurrentDate();
+        std::string currentDate = getCurrentDate();
 
-// Remove any leading zeros from newMainVersion
-while (newMainVersion.length() > 1 && newMainVersion[0] == '0')
-{
-    newMainVersion.erase(0, 1);
-}
+        // Remove any leading zeros from newMainVersion
+        while (newMainVersion.length() > 1 && newMainVersion[0] == '0')
+        {
+            newMainVersion.erase(0, 1);
+        }
 
-   // Replace the main version in the identifier with the new main version number
+        // Replace the main version in the identifier with the new main version number
         std::string modifiedIdentifier = "RELS_" + identifierPrefix + newMainVersion + "-" + newRevision;
         size_t identifierDashPos = modifiedIdentifier.find('-');
         if (identifierDashPos != std::string::npos)
@@ -254,9 +260,39 @@ while (newMainVersion.length() > 1 && newMainVersion[0] == '0')
             modifiedIdentifier = modifiedIdentifier.substr(0, identifierDashPos + 1) + newRevision;
         }
 
-        // Construct the new main version line with updated main version, revision numbers, and modified identifier
-        std::string newMainVersionLine = "const Vi_Version " + elements[0] + "_Version( \"" + elements[0] + "\", \"" + currentDate + "\", \"" +
-                                         newMainVersion + "\", \"" + newRevision + "\", \"" + modifiedIdentifier + "\", \"" +
+        // Construct the new identifier using the extracted components and the new main version
+        std::string newIdentifier = elements[4]; // Assuming the Identifier element is at index 4
+
+        // Find the position of the main version number in the identifier
+        size_t mainVersionStartPos = newIdentifier.find_last_of('_') + 1;
+        size_t mainVersionEndPos = newIdentifier.find('-', mainVersionStartPos);
+        if (mainVersionStartPos != std::string::npos && mainVersionEndPos != std::string::npos)
+        {
+            // Replace the old main version number with the new one
+            newIdentifier.replace(mainVersionStartPos, mainVersionEndPos - mainVersionStartPos, newMainVersion);
+        }
+
+        // Construct the new main version line with updated main version, revision numbers, and identifier
+
+        // Add leading zeros to the new main version number if needed
+        while (newMainVersion.length() < 3)
+        {
+            newMainVersion = "0" + newMainVersion;
+        }
+
+        // Add leading zeros to the new revision number if needed
+        while (newRevision.length() < 2)
+        {
+            newRevision = "0" + newRevision;
+        }
+
+        // Convert the new main version number to a string with leading zeros
+        std::stringstream formattedMainVersion;
+        formattedMainVersion << std::setw(3) << std::setfill('0') << newMainVersion;
+
+        // Construct the new main version line with updated main version, revision numbers, and identifier
+        std::string newMainVersionLine = "const Vi_Version " + elements[0] + "_Version( \"" + elements[0] + "\", \"" + elements[1] + "\", \"" +
+                                         formattedMainVersion.str() + "\", \"" + newRevision + "\", \"" + newIdentifier + "\", \"" +
                                          elements[5] + "\", \"" + elements[6] + "\");";
 
         // Find the position of the current main version line
