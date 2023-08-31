@@ -1,0 +1,14 @@
+﻿Build started 2023/08/31 20:33:45.
+     1>Project "C:\Users\nmeher\OneDrive - DXC Production\Documents\git_workspace\c_plus_plus_project\Ending Fix\Fixing4_Final\ConsoleApplication1\ConsoleApplication1.vcxproj" on node 2 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\ConsoleApplication1.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\ConsoleApplication1.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Fixing_Final.cpp
+         Fixing_Final.cpp
+     1>c:\users\nmeher\onedrive - dxc production\documents\git_workspace\c_plus_plus_project\ending fix\fixing4_final\consoleapplication1\fixing_final.cpp(251): error C2374: 'identifierStartPos' : redefinition; multiple initialization
+                 c:\users\nmeher\onedrive - dxc production\documents\git_workspace\c_plus_plus_project\ending fix\fixing4_final\consoleapplication1\fixing_final.cpp(226) : see declaration of 'identifierStartPos'
+     1>Done Building Project "C:\Users\nmeher\OneDrive - DXC Production\Documents\git_workspace\c_plus_plus_project\Ending Fix\Fixing4_Final\ConsoleApplication1\ConsoleApplication1.vcxproj" (Rebuild target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:04.11

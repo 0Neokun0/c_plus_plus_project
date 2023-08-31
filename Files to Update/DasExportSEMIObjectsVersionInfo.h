@@ -86,29 +86,8 @@
 // ÉoÅ[ÉWÉáÉìèÓïÒ
 //const Vi_Version DasExportSEMIObjects_VersionPrev("DasExportSEMIObjects.Prev", "2012/11/30", "550", "01", "RELS_DAS_550_01", "", "hp");
 //const Vi_Version DasExpSEMIObjects_Version_Prev ( "DasExpSEMIObjects.Prev",    "2014/03/19", "555", "02", "RELS_DAS_555_02", "", "hp");
-// const Vi_Version DasExpSEMIObjects_Version_Prev (   "DasExpSEMIObjects.Prev",    "2014/06/05", "556", "01", "RELS_DASEXPSEMIOBJECTS_556-01", "", "hp");
+const Vi_Version DasExpSEMIObjects_Version_Prev (   "DasExpSEMIObjects.Prev",    "2014/06/05", "556", "01", "RELS_DASEXPSEMIOBJECTS_556-01", "", "hp");
 //const Vi_Version DasExpSEMIObjects_Version (      "DasExpSEMIObjects",         "2014/06/05", "556", "01", "RELS_DASEXPSEMIOBJECTS_556-01", "", "hp");
-// const Vi_Version DasExpSEMIObjects_Version_Prev ( "DasExpSEMIObjects.Prev", "2016/08/17", "558", "01", "RELS_DASEXPSEMIOBJECTS_558-01", "", "hp");
-// const Vi_Version DasExpSEMIObjects_Version_Prev ( "DasExpSEMIObjects.Prev", "2023/08/30", "001", "01", "RELS_DASEXPSEMIOBJECTS_001-01", "", "hp");
-// const Vi_Version DasExpSEMIObjects_Version_Prev ( "DasExpSEMIObjects.Prev", "2023/08/30", "002", "01", "RELS_DASEXPSEMIOBJECTS_002-01", "", "hp");
-// const Vi_Version DasExpSEMIObjects_Version_Prev ( "DasExpSEMIObjects.Prev", "2023/08/30", "003", "01", "RELS_DASEXPSEMIOBJECTS_003-01", "", "hp");
-// const Vi_Version DasExpSEMIObjects_Version_Prev ( "DasExpSEMIObjects.Prev", "2023/08/30", "004", "01", "RELS_DASEXPSEMIOBJECTS_004-01", "", "hp");
-//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "005", "01", "RELS_DASEXPSEMIOBJECTS_005-01", "", "hp");
-//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "005", "02", "RELS_DASEXPSEMIOBJECTS_005-02", "", "hp");
-//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "005", "03", "RELS_DASEXPSEMIOBJECTS_005-03", "", "hp");
-//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "005", "04", "RELS_DASEXPSEMIOBJECTS_005-04", "", "hp");
-//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "005", "05", "RELS_DASEXPSEMIOBJECTS_005-05", "", "hp");
-//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "005", "06", "RELS_DASEXPSEMIOBJECTS_005-06", "", "hp");
-//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "005", "07", "RELS_DASEXPSEMIOBJECTS_005-07", "", "hp");
-// const Vi_Version DasExpSEMIObjects_Version_Prev ( "DasExpSEMIObjects.Prev", "2023/08/30", "005", "08", "RELS_DASEXPSEMIOBJECTS_005-08", "", "hp");
-//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/01/30", "006", "001", "RELS_DASEXPSEMIOBJECTS_006-01", "", "hp");
-//const Vi_Version DasExpSEMIObjects_Version_Prev ( "DasExpSEMIObjects.Prev", "2023/08/30", "006", "02", "RELS_DASEXPSEMIOBJECTS_006-02", "", "hp");
-//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2013/08/30", "007", "001", "RELS_DASEXPSEMIOBJECTS_007-01", "", "hp");
-//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "007", "02", "RELS_DASEXPSEMIOBJECTS_007-02", "", "hp");
-//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "007", "03", "RELS_DASEXPSEMIOBJECTS_007-03", "", "hp");
-//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "007", "04", "RELS_DASEXPSEMIOBJECTS_007-04", "", "hp");
-//const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "007", "05", "RELS_DASEXPSEMIOBJECTS_007-05", "", "hp");
-const Vi_Version DasExpSEMIObjects_Version_Prev ( "DasExpSEMIObjects.Prev", "2023/08/30", "007", "06", "RELS_DASEXPSEMIOBJECTS_007-06", "", "hp");
-const Vi_Version DasExpSEMIObjects_Version ( "DasExpSEMIObjects", "2023/08/30", "008", "01", "RELS_DASEXPSEMIOBJECTS_008-001", "", "hp");
+const Vi_Version DasExpSEMIObjects_Version (        "DasExpSEMIObjects",         "2016/08/17", "558", "01", "RELS_DASEXPSEMIOBJECTS_558-01", "", "hp");
 
 #endif

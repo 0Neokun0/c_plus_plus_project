@@ -300,14 +300,7 @@
 //const Vi_Version DasAppDCIM_Version (    "DasAppDCIM              ", "2017/01/23", "559", "01", "RELS_DASAPPDCIM_559-01", "", "hp");
 //const Vi_Version DasAppDCIM_Version (    "DasAppDCIM              ", "2019/08/05", "559", "02", "RELS_DASAPPDCIM_559-02", "", "dxc");
 //const Vi_Version DasAppDCIM_Version (    "DasAppDCIM              ", "2019/08/21", "559", "03", "RELS_DASAPPDCIM_559-03", "", "dxc");
-//const Vi_Version DasAppDCIM_Version_Prev ( "DasAppDCIM.Prev         ", "2020/12/09", "559", "04", "RELS_DASAPPDCIM_559-04", "", "dxc");
-//const Vi_Version DasAppDCIM_Version_Prev ( "DasAppDCIM.Prev", "2023/03/28", "000", "01", "RELS_DASAPPDCIM_000-01", "", "dxc");
-//const Vi_Version DasAppDCIM_Version_Prev ( "DasAppDCIM.Prev", "2023/08/30", "001", "01", "RELS_DASAPPDCIM_001-01", "", "dxc");
-//const Vi_Version DasAppDCIM_Version_Prev ( "DasAppDCIM.Prev", "2023/08/30", "002", "01", "RELS_DASAPPDCIM_002-01", "", "dxc");
-//const Vi_Version DasAppDCIM_Version_Prev ( "DasAppDCIM.Prev", "2023/08/30", "003", "01", "RELS_DASAPPDCIM_003-01", "", "dxc");
-//const Vi_Version DasAppDCIM_Version_Prev ( "DasAppDCIM.Prev", "2023/08/30", "004", "01", "RELS_DASAPPDCIM_004-01", "", "dxc");
-//const Vi_Version DasAppDCIM_Version_Prev ( "DasAppDCIM.Prev", "2023/08/30", "006", "01", "RELS_DASAPPDCIM_006-01", "", "dxc");
-const Vi_Version DasAppDCIM_Version_Prev ( "DasAppDCIM.Prev", "2023/08/30", "009", "01", "RELS_DASAPPDCIM_009-01", "", "dxc");
-const Vi_Version DasAppDCIM_Version ( "DasAppDCIM ", "2023/08/30", "001", "01", "RELS_DASAPPDCIM_010-01", "", "dxc");
+const Vi_Version DasAppDCIM_Version_Prev ( "DasAppDCIM.Prev         ", "2020/12/09", "559", "04", "RELS_DASAPPDCIM_559-04", "", "dxc");
+const Vi_Version DasAppDCIM_Version (      "DasAppDCIM              ", "2023/03/28", "000", "01", "RELS_DASAPPDCIM_000-01", "", "dxc");
 
 #endif

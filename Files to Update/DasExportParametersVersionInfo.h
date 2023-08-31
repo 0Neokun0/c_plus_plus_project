@@ -87,21 +87,8 @@
 // ÉoÅ[ÉWÉáÉìèÓïÒ
 //const Vi_Version DasExportParameter_Version_Prev("DasExportParameters.Prev", "2012/11/30", "550", "01", "RELS_DAS_550_01", "", "hp");
 //const Vi_Version DasExpParameters_Version_Prev ( "DasExpParameters.Prev",    "2014/03/19", "555", "02", "RELS_DAS_555_02", "", "hp");
-// const Vi_Version DasExpParameters_Version_Prev (   "DasExpParameters.Prev",    "2014/06/05", "556", "01", "RELS_DASEXPPARAMETERS_556-01", "", "hp");
+const Vi_Version DasExpParameters_Version_Prev (   "DasExpParameters.Prev",    "2014/06/05", "556", "01", "RELS_DASEXPPARAMETERS_556-01", "", "hp");
 //const Vi_Version DasExpParameters_Version (      "DasExpParameters",         "2014/06/05", "556", "01", "RELS_DASEXPPARAMETERS_556-01", "", "hp");
-// const Vi_Version DasExpParameters_Version_Prev ( "DasExpParameters.Prev", "2016/08/17", "558", "01", "RELS_DASEXPPARAMETERS_558-01", "", "hp");
-// const Vi_Version DasExpParameters_Version_Prev ( "DasExpParameters.Prev", "2023/08/30", "001", "01", "RELS_DASEXPPARAMETERS_001-01", "", "hp");
-// const Vi_Version DasExpParameters_Version_Prev ( "DasExpParameters.Prev", "2023/08/30", "002", "01", "RELS_DASEXPPARAMETERS_002-01", "", "hp");
-// const Vi_Version DasExpParameters_Version_Prev ( "DasExpParameters.Prev", "2023/08/30", "003", "01", "RELS_DASEXPPARAMETERS_003-01", "", "hp");
-//const Vi_Version DasExpParameters_Version ( "DasExpParameters", "2023/08/30", "004", "01", "RELS_DASEXPPARAMETERS_004-01", "", "hp");
-//const Vi_Version DasExpParameters_Version ( "DasExpParameters", "2023/08/30", "004", "02", "RELS_DASEXPPARAMETERS_004-02", "", "hp");
-//const Vi_Version DasExpParameters_Version ( "DasExpParameters", "2023/08/30", "004", "03", "RELS_DASEXPPARAMETERS_004-03", "", "hp");
-//const Vi_Version DasExpParameters_Version ( "DasExpParameters", "2023/08/30", "004", "04", "RELS_DASEXPPARAMETERS_004-04", "", "hp");
-//const Vi_Version DasExpParameters_Version ( "DasExpParameters", "2023/08/30", "004", "05", "RELS_DASEXPPARAMETERS_004-05", "", "hp");
-//const Vi_Version DasExpParameters_Version ( "DasExpParameters", "2023/08/30", "004", "06", "RELS_DASEXPPARAMETERS_004-06", "", "hp");
-// const Vi_Version DasExpParameters_Version_Prev ( "DasExpParameters.Prev", "2023/08/30", "004", "07", "RELS_DASEXPPARAMETERS_004-07", "", "hp");
-//const Vi_Version DasExpParameters_Version ( "DasExpParameters", "2023/08/30", "005", "01", "RELS_DASEXPPARAMETERS_005-001", "", "hp");
-const Vi_Version DasExpParameters_Version_Prev ( "DasExpParameters.Prev", "2023/08/30", "005", "02", "RELS_DASEXPPARAMETERS_005-02", "", "hp");
-const Vi_Version DasExpParameters_Version ( "DasExpParameters", "2013/08/30", "006", "001", "RELS_DASEXPPARAMETERS_006-01", "", "hp");
+const Vi_Version DasExpParameters_Version (        "DasExpParameters",         "2016/08/17", "558", "01", "RELS_DASEXPPARAMETERS_558-01", "", "hp");
 
 #endif
