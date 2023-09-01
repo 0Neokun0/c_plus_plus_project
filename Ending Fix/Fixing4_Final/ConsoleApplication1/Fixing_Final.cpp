@@ -108,7 +108,7 @@ void updateLogFile(const std::string &logFilePath, const std::string &fileName, 
     {
         // If the file cannot be opened or created, show an error message and return
         // ファイルを開くまたは作成できない場合、エラーメッセージを表示して戻る
-        std::cerr << "Error: Could not open or create update_log.txt" << std::endl;
+        std::cerr << "エラー : update_log.txt を開くか作成できませんでした。" << std::endl;
         return;
     }
 
@@ -134,14 +134,14 @@ void updateLogFile(const std::string &logFilePath, const std::string &fileName, 
     // メインバージョンの変更情報が提供されている場合は、ログファイルに書き込む
     if (!mainVersionChange.empty())
     {
-        logFile << "Main Version Changed: " << mainVersionChange << " ";
+        logFile << "メインバージョンが変更されました : " << mainVersionChange << " ";
     }
 
     // Write the revision change information if it's provided
     // リビジョンの変更情報が提供されている場合は、ログファイルに書き込む
     if (!revisionChange.empty())
     {
-        logFile << "Revision Changed: " << revisionChange << " ";
+        logFile << "リビジョンが変更されました : " << revisionChange << " ";
     }
 
     // Write a newline character to end the log entry
@@ -178,7 +178,7 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
     std::string currentMainVersionLine = findMainVersionLine(fileLines);
     if (!currentMainVersionLine.empty() && currentMainVersionLine.find("_Prev") == std::string::npos)
     {
-        std::cout << "Current Main Version Line: " << currentMainVersionLine << std::endl;
+        std::cout << "現在のメインバージョン行 : " << currentMainVersionLine << std::endl;
 
         // Extract elements inside ""
         // "" 内の要素を抽出
@@ -197,13 +197,13 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
         // Descriptions for each element
         // 各要素の説明
         std::vector<std::string> elementDescriptions(7);
-        elementDescriptions[0] = "要素：コンポーネント";
-        elementDescriptions[1] = "要素：日付";
-        elementDescriptions[2] = "要素：メインバージョン";
-        elementDescriptions[3] = "要素：リビジョン";
-        elementDescriptions[4] = "要素：識別子";
-        elementDescriptions[5] = "要素：不明1";
-        elementDescriptions[6] = "要素：不明2";
+        elementDescriptions[0] = "要素 : コンポーネント";
+        elementDescriptions[1] = "要素 : 日付";
+        elementDescriptions[2] = "要素 : メインバージョン";
+        elementDescriptions[3] = "要素 : リビジョン";
+        elementDescriptions[4] = "要素 : 識別子";
+        elementDescriptions[5] = "要素 : 不明1";
+        elementDescriptions[6] = "要素 : 不明2";
 
         // Display element descriptions along with their extracted values
         // 要素の説明と抽出された値を表示
@@ -231,13 +231,13 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
 
         // Display the current main version and revision numbers
         // 現在のメインバージョンとリビジョン番号を表示
-        std::cout << "Current Main Version: " << mainVersionFromLine << std::endl;
-        std::cout << "Current Revision: " << revisionFromLine << std::endl;
+        std::cout << "現在のメインバージョン : " << mainVersionFromLine << std::endl;
+        std::cout << "現在のリビジョン : " << revisionFromLine << std::endl;
 
         // Step 3: Find the main version number (3 digits) and ensure the revision number is 2 digits
         // ステップ 3: メインバージョン番号を検出し（3 桁）、リビジョン番号が 2 桁であることを確認
         std::string newMainVersion;
-        std::cout << "Enter the new main version (3 digits): ";
+        std::cout << "新しいメインバージョンを入力してくださ(3 桁) : ";
         std::getline(std::cin, newMainVersion);
 
         // Add leading zeros to the new main version number if needed
@@ -257,8 +257,8 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
             newRevision = revisionFromLine; // Keep the original revision // オリジナルのリビジョンを保持
         }
 
-        std::cout << "New Main Version: " << newMainVersion << std::endl;
-        std::cout << "New Revision: " << newRevision << std::endl;
+        std::cout << "新しいメインバージョン : " << newMainVersion << std::endl;
+        std::cout << "新しいリビジョン : " << newRevision << std::endl;
 
         // Step 4: Extract the identifier prefix from the current main version line
         // ステップ 4: 現在のメインバージョン行から識別子の接頭辞を抽出
@@ -274,7 +274,7 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
 
                 // Print the extracted identifier prefix for debugging
                 // デバッグ用に抽出した識別子の接頭辞を表示
-                std::cout << "Extracted Identifier Prefix: " << identifierPrefix << std::endl;
+                std::cout << "抽出した識別子の接頭辞 : " << identifierPrefix << std::endl;
             }
         }
 
@@ -470,13 +470,13 @@ void updateRevision(std::vector<std::string> &fileLines, const std::string &file
     std::vector<std::string> elementDescriptions(7);
     // extract first line
     // 1行目を抽出
-    elementDescriptions[0] = "要素：コンポーネント";
-    elementDescriptions[1] = "要素：日付";
-    elementDescriptions[2] = "要素：メインバージョン";
-    elementDescriptions[3] = "要素：リビジョン";
-    elementDescriptions[4] = "要素：識別子";
-    elementDescriptions[5] = "要素：不明1";
-    elementDescriptions[6] = "要素：不明2";
+    elementDescriptions[0] = "要素 : コンポーネント";
+    elementDescriptions[1] = "要素 : 日付";
+    elementDescriptions[2] = "要素 : メインバージョン";
+    elementDescriptions[3] = "要素 : リビジョン";
+    elementDescriptions[4] = "要素 : 識別子";
+    elementDescriptions[5] = "要素 : 不明1";
+    elementDescriptions[6] = "要素 : 不明2";
 
     std::cout << "メインバージョン行から抽出された要素：" << std::endl;
     for (size_t i = 0; i < elements.size() && i < elementDescriptions.size(); ++i)
@@ -572,7 +572,7 @@ void updateRevision(std::vector<std::string> &fileLines, const std::string &file
 
     // Display the updated revision line again after logging
     // ロギング後に再度更新されたリビジョン行を表示
-    std::cout << "更新されたリビジョン行: " << newRevisionLine << std::endl;
+    std::cout << "更新されたリビジョン行 : " << newRevisionLine << std::endl;
 
     // Save the updated lines back to the file (as before)
     std::ofstream outputFile(filePath);
