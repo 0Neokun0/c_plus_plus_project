@@ -92,7 +92,17 @@
 #include <Utility/VersionInfo/Vi_Version.h>	// ShareëŒâû #include <version_info/Vi_Version.h>
 
 // ÉoÅ[ÉWÉáÉìèÓïÒ
-const Vi_Version DasMaskApply_Version_Prev ("DasMaskApply.Prev", "2012/10/02", "525", "01", "RELS_DAS_525_01", "", "hp");
-const Vi_Version DasMaskApply_Version ("DasMaskApply", "2014/06/05", "556", "01", "RELS_DASMASKAPPLY_556-01", "", "hp");
+//const Vi_Version DasMaskApply_Version_Prev ("DasMaskApply.Prev", "2012/10/02", "525", "01", "RELS_DAS_525_01", "", "hp");
+//const Vi_Version DasMaskApply_Version _Prev ("DasMaskApply.Prev", "2014/06/05", "556", "01", "RELS_DASMASKAPPLY_556-01", "", "hp");
+//const Vi_Version DasMaskApply_Version_Prev ( "DasMaskApply.Prev", "2023/09/01", "356", "01", "RELS_DASMASKAPPLY_356-01", "", "hp");
+//const Vi_Version DasMaskApply_Version_Prev ( "DasMaskApply.Prev", "2023/09/01", "466", "01", "RELS_DASMASKAPPLY_466-01", "", "hp");
+//const Vi_Version DasMaskApply_Version_Prev ( "DasMaskApply.Prev", "2023/09/01", "413", "01", "RELS_DASMASKAPPLY_413-01", "", "hp");
+//const Vi_Version DasMaskApply_Version( "DasMaskApply", "2023/09/01", "564", "01", "RELS_DASMASKAPPLY_564-01", "", "hp");
+//const Vi_Version DasMaskApply_Version( "DasMaskApply", "2023/09/01", "564", "02", "RELS_DASMASKAPPLY_564-02", "", "hp");
+//const Vi_Version DasMaskApply_Version( "DasMaskApply", "2023/09/01", "564", "03", "RELS_DASMASKAPPLY_564-03", "", "hp");
+//const Vi_Version DasMaskApply_Version( "DasMaskApply", "2023/09/01", "564", "04", "RELS_DASMASKAPPLY_564-04", "", "hp");
+//const Vi_Version DasMaskApply_Version( "DasMaskApply", "2023/09/01", "564", "05", "RELS_DASMASKAPPLY_564-05", "", "hp");
+const Vi_Version DasMaskApply_Version_Prev ( "DasMaskApply.Prev", "2023/09/01", "564", "06", "RELS_DASMASKAPPLY_564-06", "", "hp");
+const Vi_Version DasMaskApply_Version( "DasMaskApply", "2023/09/01", "123", "01", "RELS_DASMASKAPPLY_123-01", "", "hp");
 
 #endif

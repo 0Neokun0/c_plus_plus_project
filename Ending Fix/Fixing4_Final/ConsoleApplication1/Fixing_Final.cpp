@@ -216,11 +216,11 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
         std::string newRevision;
         if (newMainVersion.length() == 3 && std::all_of(newMainVersion.begin(), newMainVersion.end(), ::isdigit))
         {
-            newRevision = revisionFromLine;
+            newRevision = "01"; // Reset revision to '01'
         }
         else
         {
-            newRevision = "01"; // Reset to "01" if not valid
+            newRevision = revisionFromLine; // Keep the original revision
         }
 
         std::cout << "New Main Version: " << newMainVersion << std::endl;
@@ -263,7 +263,15 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
             newIdentifier.replace(mainVersionStartPos, mainVersionEndPos - mainVersionStartPos, newMainVersion);
         }
 
-        // Construct the new main version line with updated main version, revision numbers, and identifier
+        // Reset the identifier's revision to '01' if main version is 3 digits and all digits
+        if (newMainVersion.length() == 3 && std::all_of(newMainVersion.begin(), newMainVersion.end(), ::isdigit))
+        {
+            size_t revisionStartPos = newIdentifier.find('-', mainVersionEndPos);
+            if (revisionStartPos != std::string::npos)
+            {
+                newIdentifier.replace(revisionStartPos + 1, 2, "01");
+            }
+        }
 
         // Add leading zeros to the new main version number if needed
         while (newMainVersion.length() < 3)
@@ -284,9 +292,9 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
         std::string currentDate = getCurrentDate();
 
         // Construct the new main version line with updated main version, revision numbers, and modified identifier
-        std::string newMainVersionLine = "const Vi_Version " + elements[0] + "_Version( \"" + elements[0] + "\", \"" + currentDate + "\", \"" +
+        std::string newMainVersionLine = "const Vi_Version " + trim(elements[0]) + "_Version( \"" + trim(elements[0]) + "\", \"" + trim(currentDate) + "\", \"" +
                                          formattedMainVersion.str() + "\", \"" + newRevision + "\", \"" + newIdentifier + "\", \"" +
-                                         elements[5] + "\", \"" + elements[6] + "\");";
+                                         trim(elements[5]) + "\", \"" + trim(elements[6]) + "\");";
 
         // Find the position of the current main version line
         size_t currentMainVersionPos = 0;
@@ -321,7 +329,20 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
                 size_t parenthesisPos = it->find("(", versionPos);
                 if (parenthesisPos != std::string::npos)
                 {
-                    *it = it->substr(0, parenthesisPos) + "_Prev" + it->substr(parenthesisPos);
+                    size_t prevPos = it->find("_Prev", versionPos + 8); // Length of "_Version"
+                    if (prevPos != std::string::npos)
+                    {
+                        // Remove any spaces before "_Prev"
+                        size_t spacePos = it->rfind(" ", prevPos);
+                        if (spacePos != std::string::npos)
+                        {
+                            it->erase(spacePos, 1);
+                        }
+                        // Add a space after "_Prev" before the opening parenthesis
+                        it->insert(prevPos + 5, " ");
+                    }
+
+                    *it = it->substr(0, parenthesisPos) + "_Prev " + it->substr(parenthesisPos); // Added space after "_Prev"
 
                     // Append ".Prev" to the component name
                     size_t componentStartPos = it->find("\"", parenthesisPos);
