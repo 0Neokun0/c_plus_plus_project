@@ -243,15 +243,6 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
             }
         }
 
-        // Construct the new main version line with updated main version, revision numbers, and modified identifier
-        std::string currentDate = getCurrentDate();
-
-        // Remove any leading zeros from newMainVersion
-        while (newMainVersion.length() > 1 && newMainVersion[0] == '0')
-        {
-            newMainVersion.erase(0, 1);
-        }
-
         // Replace the main version in the identifier with the new main version number
         std::string modifiedIdentifier = "RELS_" + identifierPrefix + newMainVersion + "-" + newRevision;
         size_t identifierDashPos = modifiedIdentifier.find('-');
@@ -289,9 +280,11 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
         // Convert the new main version number to a string with leading zeros
         std::stringstream formattedMainVersion;
         formattedMainVersion << std::setw(3) << std::setfill('0') << newMainVersion;
+        // Construct the new main version line with updated main version, revision numbers, and modified identifier
+        std::string currentDate = getCurrentDate();
 
-        // Construct the new main version line with updated main version, revision numbers, and identifier
-        std::string newMainVersionLine = "const Vi_Version " + elements[0] + "_Version( \"" + elements[0] + "\", \"" + elements[1] + "\", \"" +
+        // Construct the new main version line with updated main version, revision numbers, and modified identifier
+        std::string newMainVersionLine = "const Vi_Version " + elements[0] + "_Version( \"" + elements[0] + "\", \"" + currentDate + "\", \"" +
                                          formattedMainVersion.str() + "\", \"" + newRevision + "\", \"" + newIdentifier + "\", \"" +
                                          elements[5] + "\", \"" + elements[6] + "\");";
 
@@ -320,39 +313,42 @@ void updateMainVersion(std::vector<std::string> &fileLines, const std::string &f
 
         // Add "_Prev" to the current main version line
         auto it = std::find(fileLines.begin(), fileLines.end(), currentMainVersionLine);
-        size_t versionPos = it->find("_Version");
-        if (versionPos != std::string::npos)
+        if (it != fileLines.end())
         {
-            size_t parenthesisPos = it->find("(", versionPos);
-            if (parenthesisPos != std::string::npos)
+            size_t versionPos = it->find("_Version");
+            if (versionPos != std::string::npos)
             {
-                *it = it->substr(0, parenthesisPos - 1) + "_Prev" + it->substr(parenthesisPos - 1);
-
-                // Append ".Prev" to the component name
-                size_t componentStartPos = it->find("\"", parenthesisPos);
-                size_t componentEndPos = it->find("\"", componentStartPos + 1);
-                if (componentStartPos != std::string::npos && componentEndPos != std::string::npos)
+                size_t parenthesisPos = it->find("(", versionPos);
+                if (parenthesisPos != std::string::npos)
                 {
-                    std::string component = it->substr(componentStartPos + 1, componentEndPos - componentStartPos - 1);
-                    component = trim(component);
-                    std::string modifiedComponent = component + ".Prev";
-                    *it = it->substr(0, componentStartPos + 1) + modifiedComponent + it->substr(componentEndPos);
-                }
+                    *it = it->substr(0, parenthesisPos) + "_Prev" + it->substr(parenthesisPos);
 
-                // Remove extra spaces
-                size_t pos = it->find("  ");
-                while (pos != std::string::npos)
-                {
-                    it->replace(pos, 2, " ");
-                    pos = it->find("  ");
-                }
+                    // Append ".Prev" to the component name
+                    size_t componentStartPos = it->find("\"", parenthesisPos);
+                    size_t componentEndPos = it->find("\"", componentStartPos + 1);
+                    if (componentStartPos != std::string::npos && componentEndPos != std::string::npos)
+                    {
+                        std::string component = it->substr(componentStartPos + 1, componentEndPos - componentStartPos - 1);
+                        component = trim(component);
+                        std::string modifiedComponent = component + ".Prev";
+                        *it = it->substr(0, componentStartPos + 1) + modifiedComponent + it->substr(componentEndPos);
 
-                // Trim spaces at the beginning and end of the line
-                size_t startPos = it->find_first_not_of(" ");
-                size_t endPos = it->find_last_not_of(" ");
-                if (startPos != std::string::npos && endPos != std::string::npos)
-                {
-                    *it = it->substr(startPos, endPos - startPos + 1);
+                        // Remove extra spaces
+                        size_t pos = it->find("  ");
+                        while (pos != std::string::npos)
+                        {
+                            it->replace(pos, 2, " ");
+                            pos = it->find("  ");
+                        }
+
+                        // Trim spaces at the beginning and end of the line
+                        size_t startPos = it->find_first_not_of(" ");
+                        size_t endPos = it->find_last_not_of(" ");
+                        if (startPos != std::string::npos && endPos != std::string::npos)
+                        {
+                            *it = it->substr(startPos, endPos - startPos + 1);
+                        }
+                    }
                 }
             }
         }
