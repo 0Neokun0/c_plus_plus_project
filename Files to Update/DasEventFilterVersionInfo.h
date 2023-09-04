@@ -75,17 +75,6 @@
 
 // ライブラリバージョン情報
 //const Vi_Version DasEventFilter_Version_Prev ("DasEventFilter.Prev", "2013/05/28", "552", "02", "RELS_DAS_552_02", "", "hp");
-//const Vi_Version DasEventFilter_Version_Prev ("DasEventFilter.Prev", "2014/06/05", "556", "01", "RELS_DASEVENTFILTER_556-01", "", "hp");
-//const Vi_Version DasEventFilter_Version( "DasEventFilter", "2023/09/01", "003", "01", "RELS_DASEVENTFILTER_003-01", "", "hp");
-//const Vi_Version DasEventFilter_Version_Prev( "DasEventFilter.Prev", "2023/09/01", "003", "02", "RELS_DASEVENTFILTER_003-02", "", "hp");
-//const Vi_Version DasEventFilter_Version_Prev ( "DasEventFilter.Prev", "2023/09/01", "131", "02", "RELS_DASEVENTFILTER_131-02", "", "hp");
-//const Vi_Version DasEventFilter_Version_Prev( "DasEventFilter.Prev", "2023/09/01", "123", "02", "RELS_DASEVENTFILTER_123-02", "", "hp");
-//const Vi_Version DasEventFilter_Version_Prev ( "DasEventFilter.Prev", "2023/09/01", "121", "02", "RELS_DASEVENTFILTER_121-02", "", "hp");
-//const Vi_Version DasEventFilter_Version( "DasEventFilter", "2023/09/01", "002", "01", "RELS_DASEVENTFILTER_002-01", "", "hp");
-//const Vi_Version DasEventFilter_Version( "DasEventFilter", "2023/09/01", "002", "02", "RELS_DASEVENTFILTER_002-02", "", "hp");
-//const Vi_Version DasEventFilter_Version( "DasEventFilter", "2023/09/01", "002", "03", "RELS_DASEVENTFILTER_002-03", "", "hp");
-//const Vi_Version DasEventFilter_Version( "DasEventFilter", "2023/09/01", "002", "04", "RELS_DASEVENTFILTER_002-04", "", "hp");
-//const Vi_Version DasEventFilter_Version( "DasEventFilter", "2023/09/01", "002", "05", "RELS_DASEVENTFILTER_002-05", "", "hp");
-const Vi_Version DasEventFilter_Version_Prev ( "DasEventFilter.Prev", "2023/09/01", "002", "06", "RELS_DASEVENTFILTER_002-06", "", "hp");
-const Vi_Version DasEventFilter_Version( "DasEventFilter", "2023/09/01", "003", "01", "RELS_DASEVENTFILTER_003-01", "", "hp");
+const Vi_Version DasEventFilter_Version _Prev ("DasEventFilter.Prev", "2014/06/05", "556", "01", "RELS_DASEVENTFILTER_556-01", "", "hp");
+const Vi_Version DasEventFilter_Version( "DasEventFilter", "2023/09/04", "131", "01", "RELS_DASEVENTFILTER_131-01", "", "hp");
 #endif

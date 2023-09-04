@@ -31,15 +31,7 @@
 //const Vi_Version DasExdpLoadData_Version ("DasExdpLoadData", "2014/06/05", "556", "01", "RELS_DASEXDPLOADDATA_556-01", "", "hp");
 //const Vi_Version DasExdpLoadData_Version_Prev ("DasExdpLoadData", "2014/06/05", "556", "01", "RELS_DASEXDPLOADDATA_556-01", "", "hp");
 //const Vi_Version DasCLoadData_Version       ("DasCLoadData",    "2021/12/05", "000", "01", "RELS_DASCLOADDATA_000-01", "", "hp");
-//const Vi_Version DasCLoadData_Version _Prev ("DasCLoadData.Prev", "2023/03/28", "000", "02", "RELS_DASCLOADDATA_000-02", "", "dxc");
-//const Vi_Version DasCLoadData_Version_Prev ( "DasCLoadData.Prev", "2023/09/01", "123", "02", "RELS_DASCLOADDATA_123-02", "", "dxc");
-//const Vi_Version DasCLoadData_Version_Prev ( "DasCLoadData.Prev", "2023/09/01", "124", "02", "RELS_DASCLOADDATA_124-02", "", "dxc");
-//const Vi_Version DasCLoadData_Version_Prev ( "DasCLoadData.Prev", "2023/09/01", "928", "02", "RELS_DASCLOADDATA_928-02", "", "dxc");
-//const Vi_Version DasCLoadData_Version( "DasCLoadData", "2023/09/01", "665", "01", "RELS_DASCLOADDATA_665-01", "", "dxc");
-//const Vi_Version DasCLoadData_Version( "DasCLoadData", "2023/09/01", "665", "02", "RELS_DASCLOADDATA_665-02", "", "dxc");
-//const Vi_Version DasCLoadData_Version( "DasCLoadData", "2023/09/01", "665", "03", "RELS_DASCLOADDATA_665-03", "", "dxc");
-//const Vi_Version DasCLoadData_Version( "DasCLoadData", "2023/09/01", "665", "04", "RELS_DASCLOADDATA_665-04", "", "dxc");
-const Vi_Version DasCLoadData_Version_Prev ( "DasCLoadData.Prev", "2023/09/01", "665", "05", "RELS_DASCLOADDATA_665-05", "", "dxc");
-const Vi_Version DasCLoadData_Version( "DasCLoadData", "2023/09/01", "001", "01", "RELS_DASCLOADDATA_001-01", "", "dxc");
+const Vi_Version DasCLoadData_Version _Prev ("DasCLoadData.Prev", "2023/03/28", "000", "02", "RELS_DASCLOADDATA_000-02", "", "dxc");
+const Vi_Version DasCLoadData_Version( "DasCLoadData", "2023/09/04", "123", "01", "RELS_DASCLOADDATA_123-01", "", "dxc");
 
 #endif
